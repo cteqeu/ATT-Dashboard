@@ -1,6 +1,8 @@
 class Coordinate {
     place: string;
+
     lat: number;
+
     long: number;
 
     constructor(place: string, lat: number, long: number) {
@@ -10,6 +12,8 @@ class Coordinate {
     }
 }
 
-type Markers = Array<Coordinate>;
+interface Ex {
+    x: string;
+ }
 
-export { Coordinate, Markers };
+export { Coordinate, Ex };

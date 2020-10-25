@@ -1,25 +1,31 @@
 <template>
     <div class="map-wrapper">
-        {{ markers }}
-        <!-- <l-map id="map" :zoom="zoom" :center="center" :options="mapOptions">
+        <l-map id="map" :zoom="zoom" :center="center" :options="mapOptions">
             <l-tile-layer :url="url" :attribution="attribution" />
-        </l-map> -->
+        </l-map>
     </div>
 </template>
 
 <script lang="ts">
-import { Prop, Vue } from 'vue-property-decorator';
-import { latLng } from 'leaflet';
+import { Prop, Vue, Component } from 'vue-property-decorator';
 import { PropType } from 'vue';
-/* eslint-disable */
+import { latLng } from 'leaflet';
 import { LMap, LTileLayer, LMarker, LPopup, LTooltip } from 'vue2-leaflet';
-/* eslint-enable */
-import { Markers } from '@/components/Map/MapTypes.ts';
+import { Coordinate } from './Map/MapTypes';
 
+@Component({
+    components: {
+        LMap,
+        LTileLayer,
+        LMarker,
+        LPopup,
+        LTooltip,
+    },
+})
 export default class MapCompontent extends Vue {
     // Props
-    @Prop({ required: true, type: Array as PropType<Markers> })
-    public readonly markers!: Markers;
+    @Prop({ required: true, type: Array as PropType<Coordinate[]> })
+    public markers!: Coordinate[];
 
     // Data
     showMap = false;
@@ -35,6 +41,12 @@ export default class MapCompontent extends Vue {
     mapOptions = {
         zoomSnap: 0.5,
     };
+
+    mounted() {
+        console.log('hello ;');
+
+        console.log(this.markers);
+    }
 }
 </script>
 

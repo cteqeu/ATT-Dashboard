@@ -5,7 +5,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import MapComponent from '@/components/MapComponent.vue';
-import { Coordinate, Markers } from '@/components/Map/MapTypes.ts';
+import { Coordinate } from '../components/Map/MapTypes';
 
 @Component({
     components: {
@@ -13,6 +13,10 @@ import { Coordinate, Markers } from '@/components/Map/MapTypes.ts';
     },
 })
 export default class Map extends Vue {
-    markers: Markers = [new Coordinate('hasselt', 10, 30)];
+    markers: Coordinate[] = new Array<Coordinate>();
+
+    mounted() {
+        this.markers.push(new Coordinate('PXL', 20, 20));
+    }
 }
 </script>

@@ -196,7 +196,7 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class App extends Vue {
     drawer = true;
 
-    dialog = true;
+    dialog = false;
 
     mini = true;
 
