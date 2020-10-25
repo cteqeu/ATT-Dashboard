@@ -11,5 +11,14 @@ module.exports = {
         indent: ['error', 4],
         'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+        'object-curly-newline': 'off',
+        'import/extensions': 'off',
+    },
+    settings: {
+        'import/resolver': {
+            node: {
+                extensions: ['.js', '.jsx', '.vue'],
+            },
+        },
     },
 };
