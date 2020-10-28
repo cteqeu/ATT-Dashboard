@@ -18,7 +18,9 @@
             :x="item.x"
             :y="item.y"
         >
-            <v-card align="center" height="100%">hello</v-card>
+            <v-card align="center" height="100%">
+                <LightChart />
+            </v-card>
         </grid-item>
     </grid-layout>
 </template>
@@ -26,6 +28,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { GridItem, GridLayout } from 'vue-grid-layout';
+import LightChart from '../components/Charts/LightChart.vue';
 
 interface Icell {
     x: number;
@@ -40,6 +43,7 @@ interface Icell {
     components: {
         GridItem,
         GridLayout,
+        LightChart,
     },
 })
 export default class Charts extends Vue {

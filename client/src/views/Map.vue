@@ -16,7 +16,8 @@ export default class Map extends Vue {
     markers: Coordinate[] = new Array<Coordinate>();
 
     mounted() {
-        this.markers.push(new Coordinate('PXL', 20, 20));
+        this.markers.push(new Coordinate('PXL', 50.953245, 5.354043));
+        this.markers.push(new Coordinate('PXHell', 50.95175, 5.350550));
     }
 }
 </script>
