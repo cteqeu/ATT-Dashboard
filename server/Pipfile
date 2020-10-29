@@ -9,6 +9,12 @@ pylint = "*"
 [packages]
 paho-mqtt = "*"
 flask-cors = "*"
+flask-socketio = "*"
+gevent = "*"
+gevent-websocket = "*"
+eventlet = "*"
+flask-mqtt = "*"
+flask-bootstrap = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"
