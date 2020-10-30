@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/JensVanhulst/IOT-Dashboard" target="_blank" rel="noopener noreferrer">
-    <img width="400" src="../ATT-Dashboard/assets/logo_pxl.png" alt="IOT dashboard">
+  <a href="#" target="_blank" rel="noopener noreferrer">
+    <img width="400" src="assets/logo_pxl.png" alt="PXL">
   </a>
 </p>
 
