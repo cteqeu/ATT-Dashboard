@@ -29,15 +29,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { GridItem, GridLayout } from 'vue-grid-layout';
 import LightChart from '../components/Charts/LightChart.vue';
-
-interface Icell {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-    i: string;
-    static: boolean;
-}
+import { Cell } from '../types';
 
 @Component({
     components: {
@@ -49,7 +41,7 @@ interface Icell {
 export default class Charts extends Vue {
     index = 0;
 
-    layout: Icell[] = [
+    layout: Cell[] = [
         {
             x: 0,
             y: 0,
@@ -101,6 +93,7 @@ export default class Charts extends Vue {
     ];
 }
 </script>
+
 <style lang="scss" scoped>
 .vue-grid-layout {
     background: transparent;

@@ -3,8 +3,8 @@ import L from 'leaflet';
 import VueSocketIO from 'vue-socket.io';
 import SocketIO from 'socket.io-client';
 import VueApexCharts from 'vue-apexcharts';
+import VuePageTransition from 'vue-page-transition';
 import App from './App.vue';
-// Import the whole Leaflet CSS
 import 'leaflet/dist/leaflet.css';
 import router from './router';
 import vuetify from './plugins/vuetify';
@@ -19,19 +19,22 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
+Vue.use(VuePageTransition);
+
 Vue.component('apexchart', VueApexCharts);
-Vue.use(new VueSocketIO({
-    debug: true,
-    connection: SocketIO('http://localhost:5000', {
-        transportOptions: {
-            polling: {
-                extraHeaders: {
-                  Authorization: 'cQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s'
-                }
-              }
-        }
-    }), //options object is Optional
-  })
+Vue.use(
+    new VueSocketIO({
+        debug: true,
+        connection: SocketIO('http://localhost:5000', {
+            transportOptions: {
+                polling: {
+                    extraHeaders: {
+                        Authorization: 'cQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s',
+                    },
+                },
+            },
+        }),
+    }),
 );
 
 Vue.config.productionTip = false;

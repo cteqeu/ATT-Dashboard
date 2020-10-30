@@ -35,19 +35,13 @@
         </div>
 
         <div id="chart-timeline">
-            <apexchart
-                type="area"
-                height="350"
-                ref="chart"
-                :options="chartOptions"
-                :series="series"
-            ></apexchart>
+            <apexchart type="area" height="350" :options="chartOptions" :series="series" />
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Prop, Vue, Component } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 
 @Component({
     components: {},
@@ -406,6 +400,8 @@ export default class MapCompontent extends Vue {
     };
 
     selection = 'one_year';
+
+    updateData = (x: string) => console.log('update', x);
 }
 </script>
 

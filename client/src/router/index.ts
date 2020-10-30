@@ -12,22 +12,22 @@ const routes: Array<RouteConfig> = [
     {
         path: '/map',
         name: 'Map',
-        component: () => import(/* webpackChunkName: "charts" */ '../views/Map.vue'),
+        component: () => import(/* webpackChunkName: "map" */ '../views/Map.vue'),
     },
     {
         path: '/battery',
         name: 'Battery',
-        component: () => import(/* webpackChunkName: "charts" */ '../views/Battery.vue'),
+        component: () => import(/* webpackChunkName: "battery" */ '../views/Battery.vue'),
     },
     {
         path: '/att',
         name: 'Att',
-        component: () => import(/* webpackChunkName: "charts" */ '../views/Att.vue'),
+        component: () => import(/* webpackChunkName: "att" */ '../views/Att.vue'),
     },
     {
         path: '/settings',
         name: 'Settings',
-        component: () => import(/* webpackChunkName: "charts" */ '../views/Settings.vue'),
+        component: () => import(/* webpackChunkName: "settings" */ '../views/Settings.vue'),
     },
 ];
 
