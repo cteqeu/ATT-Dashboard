@@ -1,6 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,node,vscode,vue,python,flask
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,node,vscode,vue,python,flask
-
+db.env
 ### Flask ###
 instance/*
 !instance/.gitignore
