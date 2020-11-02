@@ -19,79 +19,77 @@
             :y="item.y"
         >
             <v-card align="center" height="100%">
-                <LightChart />
+                <TempChart v-if="item.type === 'temperature'"/>
+                <PressureChart v-else-if="item.type === 'pressure'"/>
+                <AirqualityChart v-else-if="item.type === 'airquality'"/>
+                <HumidityChart v-else-if="item.type === 'humidity'" />
             </v-card>
         </grid-item>
     </grid-layout>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Vue } from 'vue-property-decorator';
 import { GridItem, GridLayout } from 'vue-grid-layout';
-import LightChart from '../components/Charts/LightChart.vue';
-import { Cell } from '../types';
+import TempChart from '../components/Charts/TempChart.vue';
+import PressureChart from '../components/Charts/PressureChart.vue';
+import AirqualityChart from '../components/Charts/AirqualityChart.vue';
+import HumidityChart from '../components/Charts/HumidityChart.vue';
 
-@Component({
+export default Vue.extend({
     components: {
         GridItem,
         GridLayout,
-        LightChart,
+        TempChart,
+        PressureChart,
+        AirqualityChart,
+        HumidityChart,
     },
-})
-export default class Charts extends Vue {
-    index = 0;
 
-    layout: Cell[] = [
-        {
-            x: 0,
-            y: 0,
-            w: 6,
-            h: 11,
-            i: '0',
-            static: false,
-        },
-        {
-            x: 6,
-            y: 7,
-            w: 6,
-            h: 11,
-            i: '1',
-            static: false,
-        },
-        {
-            x: 0,
-            y: 12,
-            w: 3,
-            h: 7,
-            i: '2',
-            static: false,
-        },
-        {
-            x: 3,
-            y: 12,
-            w: 3,
-            h: 7,
-            i: '3',
-            static: false,
-        },
-        {
-            x: 6,
-            y: 0,
-            w: 3,
-            h: 7,
-            i: '4',
-            static: false,
-        },
-        {
-            x: 9,
-            y: 0,
-            w: 3,
-            h: 7,
-            i: '5',
-            static: false,
-        },
-    ];
-}
+    data() {
+        return {
+            index: 0,
+            layout: [
+                {
+                    type: 'temperature',
+                    x: 0,
+                    y: 0,
+                    w: 6,
+                    h: 11,
+                    i: '0',
+                    static: false,
+                },
+                {
+                    type: 'pressure',
+                    x: 6,
+                    y: 7,
+                    w: 6,
+                    h: 10,
+                    i: '1',
+                    static: false,
+                },
+                {
+                    type: 'airquality',
+                    x: 0,
+                    y: 12,
+                    w: 3,
+                    h: 10,
+                    i: '2',
+                    static: false,
+                },
+                {
+                    type: 'humidity',
+                    x: 6,
+                    y: 0,
+                    w: 6,
+                    h: 11,
+                    i: '3',
+                    static: false,
+                },
+            ],
+        };
+    },
+});
 </script>
 
 <style lang="scss" scoped>

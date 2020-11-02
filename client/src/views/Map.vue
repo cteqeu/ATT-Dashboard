@@ -3,21 +3,31 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Vue } from 'vue-property-decorator';
 import MapComponent from '@/components/MapComponent.vue';
 import { Coordinate } from '../types';
 
-@Component({
+export default Vue.extend({
     components: {
         MapComponent,
     },
-})
-export default class Map extends Vue {
-    markers: Coordinate[] = new Array<Coordinate>();
+    data() {
+        return {
+            markers: [],
+        };
+    },
 
     mounted() {
         this.markers.push(new Coordinate('PXL', 50.953245, 5.354043));
         this.markers.push(new Coordinate('PXHell', 50.95175, 5.35055));
-    }
-}
+    },
+
+    sockets: {
+        gps(data: string) {
+            const message = JSON.parse(data);
+            const values = message.value;
+            this.markers.push(new Coordinate(values.altitude, values.latitude, values.longitude));
+        },
+    },
+});
 </script>

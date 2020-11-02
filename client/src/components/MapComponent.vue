@@ -3,7 +3,7 @@
         <l-map id="map" :zoom="zoom" :center="center" :options="mapOptions">
             <l-tile-layer :url="url" :attribution="attribution" />
             <l-marker v-for="(marker, i) in markers" :key="i" :lat-lng="[marker.lat, marker.long]">
-                <l-popup>{{ marker.place }}</l-popup>
+                <l-popup>Altitude : {{ marker.place }}</l-popup>
             </l-marker>
             <l-polyline :lat-lngs="polylines" color="blue" />
         </l-map>

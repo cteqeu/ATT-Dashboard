@@ -4,7 +4,7 @@
             <v-toolbar-title>All things talk - {{ this.$route.name }}</v-toolbar-title>
         </v-app-bar>
 
-        <navigation-drawer name="Vincent Cleas" :items="items" />
+        <navigation-drawer name="Vincent Class i" :items="items" />
 
         <intro-stepper />
 
@@ -42,7 +42,6 @@ export default class App extends Vue {
     items: NavItems[] = [
         { title: 'Charts', icon: 'mdi-poll', link: '/' },
         { title: 'Map', icon: 'mdi-map', link: '/map' },
-        { title: 'Battery', icon: 'mdi-battery-70', link: '/battery' },
         { title: 'ATT - Orange', icon: 'mdi-web', link: '/att' },
         { title: 'Settings', icon: 'mdi-cog-outline', link: 'settings' },
     ];

@@ -15,11 +15,6 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: "map" */ '../views/Map.vue'),
     },
     {
-        path: '/battery',
-        name: 'Battery',
-        component: () => import(/* webpackChunkName: "battery" */ '../views/Battery.vue'),
-    },
-    {
         path: '/att',
         name: 'Att',
         component: () => import(/* webpackChunkName: "att" */ '../views/Att.vue'),
@@ -28,6 +23,11 @@ const routes: Array<RouteConfig> = [
         path: '/settings',
         name: 'Settings',
         component: () => import(/* webpackChunkName: "settings" */ '../views/Settings.vue'),
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: () => import(/* webpackChunkName: "settings" */ '../views/Login.vue'),
     },
 ];
 

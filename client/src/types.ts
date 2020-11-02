@@ -11,6 +11,7 @@ interface Cell {
     h: number;
     i: string;
     static: boolean;
+    type: string;
 }
 
 class Coordinate {
