@@ -1,14 +1,13 @@
 <template>
-    <div id="chart">
-        <div id="chart-timeline">
-            <apexchart
-                type="area"
-                height="350"
-                :options="chartOptions"
-                ref="humidityChart"
-                :series="series"
-            />
-        </div>
+    <div>
+        <v-card-title class="justify-center pb-0">Humidity</v-card-title>
+        <apexchart
+            type="area"
+            height="130%"
+            :options="chartOptions"
+            ref="humidityChart"
+            :series="series"
+        />
     </div>
 </template>
 
@@ -50,10 +49,6 @@ export default Vue.extend({
                 markers: {
                     size: 0,
                 },
-                title: {
-                    text: 'Stock Price Movement',
-                    align: 'left',
-                },
                 fill: {
                     type: 'gradient',
                     gradient: {
@@ -66,7 +61,7 @@ export default Vue.extend({
                 },
                 yaxis: {
                     labels: {
-                        formatter: (val: any) => (val).toFixed(0),
+                        formatter: (val: any) => val.toFixed(0),
                     },
                     title: {
                         text: 'Price',
@@ -75,7 +70,7 @@ export default Vue.extend({
                 tooltip: {
                     shared: false,
                     y: {
-                        formatter: (val: any) => (val).toFixed(0),
+                        formatter: (val: any) => val.toFixed(0),
                     },
                 },
             },

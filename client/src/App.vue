@@ -2,6 +2,13 @@
     <v-app>
         <v-app-bar app color="primary" dark>
             <v-toolbar-title>All things talk - {{ this.$route.name }}</v-toolbar-title>
+            <v-spacer />
+            <v-btn to="login" v-if="getIsUserLoggedIn == undefined || getIsUserLoggedIn == false">
+                <v-icon left>mdi-login-variant</v-icon>Login
+            </v-btn>
+            <v-btn to="/" v-if="getIsUserLoggedIn" @click="processLogout()">
+                Logout <v-icon right>mdi-logout-variant</v-icon>
+            </v-btn>
         </v-app-bar>
 
         <navigation-drawer name="Vincent Class i" :items="items" />
@@ -47,6 +54,14 @@ export default class App extends Vue {
     ];
 
     onlineStatus = false;
+
+    mounted() {
+        this.$http.get('http://localhost:5000').then((res) => {
+            console.log(res);
+        }).catch((e) => {
+            console.log(e);
+        });
+    }
 
     handleConnectivityChange(status: boolean) {
         if (!status) {

@@ -4,7 +4,7 @@
         :is-draggable="true"
         :is-resizable="false"
         :layout="layout"
-        :row-height="30"
+        :row-height="40"
         :use-css-transforms="true"
         :vertical-compact="true"
     >
@@ -18,11 +18,11 @@
             :x="item.x"
             :y="item.y"
         >
-            <v-card align="center" height="100%">
-                <TempChart v-if="item.type === 'temperature'"/>
-                <PressureChart v-else-if="item.type === 'pressure'"/>
-                <AirqualityChart v-else-if="item.type === 'airquality'"/>
-                <HumidityChart v-else-if="item.type === 'humidity'" />
+            <v-card :loading="!isActive" align="center" height="100%">
+                <TempChart v-if="item.type === 'temperature' && isActive"/>
+                <PressureChart v-else-if="item.type === 'pressure' && isActive"/>
+                <AirqualityChart v-else-if="item.type === 'airquality' && isActive"/>
+                <HumidityChart v-else-if="item.type === 'humidity' && isActive" />
             </v-card>
         </grid-item>
     </grid-layout>
@@ -46,8 +46,15 @@ export default Vue.extend({
         HumidityChart,
     },
 
+    mounted() {
+        setTimeout(() => {
+            this.isActive = true;
+        }, 1000);
+    },
+
     data() {
         return {
+            isActive: false,
             index: 0,
             layout: [
                 {
@@ -55,7 +62,7 @@ export default Vue.extend({
                     x: 0,
                     y: 0,
                     w: 6,
-                    h: 11,
+                    h: 7,
                     i: '0',
                     static: false,
                 },
@@ -64,7 +71,7 @@ export default Vue.extend({
                     x: 6,
                     y: 7,
                     w: 6,
-                    h: 10,
+                    h: 7,
                     i: '1',
                     static: false,
                 },
@@ -73,7 +80,7 @@ export default Vue.extend({
                     x: 0,
                     y: 12,
                     w: 3,
-                    h: 10,
+                    h: 7,
                     i: '2',
                     static: false,
                 },
@@ -82,7 +89,7 @@ export default Vue.extend({
                     x: 6,
                     y: 0,
                     w: 6,
-                    h: 11,
+                    h: 7,
                     i: '3',
                     static: false,
                 },

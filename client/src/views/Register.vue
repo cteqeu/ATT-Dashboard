@@ -1,13 +1,10 @@
-<!--
-frontend\src\modules\authentication\Login.vue
-Author: Author : Andre Baldo (http://github.com/andrebaldo/) -->
 <template>
     <v-card>
         <v-card-title primary-title>
-            <h1>Login</h1>
+            <h1>Register</h1>
         </v-card-title>
         <v-card-text>
-            <v-form rounded v-model="isLoginFormValid">
+            <v-form rounded v-model="isRegisterFormValid">
                 <v-text-field
                     name="email"
                     label="Email*"
@@ -22,6 +19,7 @@ Author: Author : Andre Baldo (http://github.com/andrebaldo/) -->
                     label="Password*"
                     id="password"
                     v-model="password"
+                    counter="50"
                     required
                 />
 
@@ -31,14 +29,15 @@ Author: Author : Andre Baldo (http://github.com/andrebaldo/) -->
             </v-form>
         </v-card-text>
         <v-card-actions>
-            <router-link to="register">Go to Register</router-link>
-            <v-spacer></v-spacer>
+            <router-link to="login">Go to login</router-link>
+            <v-spacer />
             <v-btn
                 color="success"
-                :disabled="!isLoginFormValid || isProcessing"
-                @click="login({ email: email, password: password })"
-                >Login</v-btn
+                :disabled="!isRegisterFormValid || isProcessing"
+                @click="registerNewUser({ email: email, password: password })"
             >
+                <v-icon left>mdi-account-plus</v-icon>Register
+            </v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -48,26 +47,24 @@ import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default Vue.extend({
-    name: 'Login',
+    name: 'Register',
     data() {
         return {
-            isLoginFormValid: false,
+            isRegisterFormValid: false,
             email: '',
             password: '',
         };
     },
+
     methods: {
-        ...mapActions(['authenticateUserAndSetToken']),
-        /* eslint-disable */
-        login(loginData) {
-            loginData.controllerReference = this;
-            this.authenticateUserAndSetToken(loginData).then((controller) => {
-                controller.$router.push('/');
-            });
-        },
+        ...mapActions(['registerNewUser']),
     },
     computed: {
-        ...mapGetters(['getLoginProcessMessage', 'isProcessing', 'getIsUserLoggedIn']),
+        ...mapGetters([
+            'getIsRegistrationProcessSucceed',
+            'getRegistrationProcessMessage',
+            'isProcessing',
+        ]),
     },
 });
 </script>

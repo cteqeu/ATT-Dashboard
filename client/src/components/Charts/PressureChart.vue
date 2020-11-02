@@ -1,13 +1,7 @@
 <template>
-    <div id="chart">
-        <div id="chart-timeline">
-            <apexchart
-                height="350"
-                :options="chartOptions"
-                ref="pressureChart"
-                :series="series"
-            />
-        </div>
+    <div>
+        <v-card-title class="justify-center pb-0">Pressure</v-card-title>
+        <apexchart height="130%" :options="chartOptions" ref="pressureChart" :series="series" />
     </div>
 </template>
 
@@ -62,14 +56,14 @@ export default Vue.extend({
                     max: 5,
                     labels: {
                         /* eslint-disable */
-                        formatter: function (y:any) {
+                        formatter: function(y: any) {
                             return y.toFixed(2) + '%';
                         },
                     },
                 },
                 tooltip: {
                     y: {
-                        formatter: (val: any) => ((val/100*1013.25) + 1013.25)
+                        formatter: (val: any) => (val / 100) * 1013.25 + 1013.25,
                     },
                 },
                 xaxis: {
@@ -112,7 +106,7 @@ export default Vue.extend({
                 this.$data.pressureData.shift();
                 this.$data.timestamps.shift();
             }
-            this.$data.pressureData.push(((value-1013.25) / 1013.25)*100);
+            this.$data.pressureData.push(((value - 1013.25) / 1013.25) * 100);
             this.$data.timestamps.push(timestamp);
         },
     },

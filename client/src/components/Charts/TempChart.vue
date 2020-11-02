@@ -1,15 +1,10 @@
 <template>
-    <div id="chart">
-        <div id="chart-timeline">
-            <apexchart
-                type="area"
-                height="350"
-                :options="chartOptions"
-                ref="temperatureChart"
-                :series="series"
-            />
-        </div>
+    <div>
+        <v-card-title class="justify-center pb-0">Temperature</v-card-title>
+        <apexchart height="130%" type="area"
+            :options="chartOptions" ref="temperatureChart" :series="series" />
     </div>
+
 </template>
 
 <script lang="ts">
@@ -32,6 +27,14 @@ export default Vue.extend({
             ],
 
             chartOptions: {
+                // title: {
+                //     text: 'Temperature',
+                //     align: 'center',
+                //     margin: 50,
+                //     style: {
+                //         fontSize: '18px',
+                //     },
+                // },
                 yaxis: {
                     max: 50,
                     min: -20,
@@ -102,8 +105,8 @@ export default Vue.extend({
             const [timestamp, _] = new Date(message.at).toTimeString().split(' ');
 
             if (this.$data.temperatureData.length > 9) {
-                this.$data.temperatureData.shift()
-                this.$data.timestamps.shift()
+                this.$data.temperatureData.shift();
+                this.$data.timestamps.shift();
             }
 
             this.$data.temperatureData.push(value);

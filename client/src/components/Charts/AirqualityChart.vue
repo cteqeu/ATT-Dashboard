@@ -1,13 +1,9 @@
 <template>
-    <div id="chart">
-        <div id="chart-timeline">
-            <apexchart
-                height="350"
-                :options="chartOptions"
-                ref="airqualityChart"
-                :series="series"
-            />
-        </div>
+    <div>
+        <v-card-title class="justify-center pb-0">Air quality</v-card-title>
+
+        <apexchart :height="chartSize"
+            :options="chartOptions" ref="airqualityChart" :series="series"/>
     </div>
 </template>
 
@@ -20,13 +16,28 @@ interface Airquality {
 }
 
 export default Vue.extend({
+    computed: {
+        chartSize: () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            const widthMain = width - 256;
+
+            const widthAirQuality = ((widthMain - 24) / 4);
+            const heightAirQuality = 340 - 20;
+
+            if (widthAirQuality > heightAirQuality) {
+                return `${heightAirQuality}px`;
+            }
+            return `${widthAirQuality}px`;
+        },
+    },
     data() {
         return {
             // Max, Curr, Min
             series: [0, 0, 100],
             chartOptions: {
                 chart: {
-                    height: 350,
                     type: 'radialBar',
                 },
                 plotOptions: {

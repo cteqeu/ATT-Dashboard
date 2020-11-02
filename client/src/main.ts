@@ -4,10 +4,14 @@ import VueSocketIO from 'vue-socket.io';
 import SocketIO from 'socket.io-client';
 import VueApexCharts from 'vue-apexcharts';
 import VuePageTransition from 'vue-page-transition';
+import axios from 'axios';
 import App from './App.vue';
 import 'leaflet/dist/leaflet.css';
 import router from './router';
 import vuetify from './plugins/vuetify';
+import store from './store';
+
+Vue.prototype.$http = axios;
 
 /* eslint-disable */
 // @ts-ignore
@@ -42,5 +46,6 @@ Vue.config.productionTip = false;
 new Vue({
     router,
     vuetify,
-    render: (h) => h(App),
+    store,
+    render: (h) => h(App)
 }).$mount('#app');
