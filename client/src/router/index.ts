@@ -19,11 +19,6 @@ const routes: Array<RouteConfig> = [
         name: 'Att',
         component: () => import(/* webpackChunkName: "att" */ '../views/Att.vue'),
     },
-    {
-        path: '/settings',
-        name: 'Settings',
-        component: () => import(/* webpackChunkName: "settings" */ '../views/Settings.vue'),
-    },
 ];
 
 const router = new VueRouter({

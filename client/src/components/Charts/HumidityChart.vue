@@ -3,7 +3,7 @@
         <v-card-title class="justify-center pb-0">Humidity</v-card-title>
         <apexchart
             type="area"
-            height="130%"
+            height="280px"
             :options="chartOptions"
             ref="humidityChart"
             :series="series"
@@ -39,9 +39,6 @@ export default Vue.extend({
                         enabled: true,
                         autoScaleYaxis: true,
                     },
-                    toolbar: {
-                        autoSelected: 'zoom',
-                    },
                 },
                 dataLabels: {
                     enabled: false,
@@ -60,11 +57,18 @@ export default Vue.extend({
                     },
                 },
                 yaxis: {
+                    min: 0,
+                    max: 100,
                     labels: {
                         formatter: (val: any) => val.toFixed(0),
                     },
                     title: {
-                        text: 'Price',
+                        text: 'Percentage',
+                    },
+                },
+                xaxis: {
+                    title: {
+                        text: 'Time',
                     },
                 },
                 tooltip: {

@@ -1,13 +1,7 @@
 <template>
     <v-navigation-drawer app overflow permanent>
         <v-list-item class="px-2">
-            <v-list-item-avatar>
-                <v-avatar color="primary" size="36">
-                    <span class="white--text">{{ initials }}</span>
-                </v-avatar>
-            </v-list-item-avatar>
-
-            <v-list-item-title>{{ username }}</v-list-item-title>
+          <v-img height="85px" src="https://www.thethingsnetwork.org/conference/wp-content/uploads/2018/12/AllThingsTalk-1.png" />
         </v-list-item>
 
         <v-divider />
@@ -39,24 +33,10 @@ import { NavItems } from '../types';
 
 @Component
 export default class NavigationDrawer extends Vue {
-    @Prop({ required: true, type: String })
-    name = '';
-
     @Prop({ required: true, type: Array as PropType<NavItems[]> })
     items!: NavItems[];
 
     openPXLWebsite = () => window.open('http://www.pxl.be');
-
-    get username() {
-        return this.name;
-    }
-
-    private get initials(): string {
-        // Function used to get initials : https://stackoverflow.com/questions/33076177/getting-name-initials-using-js
-        const n = this.name.split(' ');
-        if (n.length === 1) return `${n[0].charAt(0)}`;
-        return `${n[0].charAt(0)}${n[n.length - 1].charAt(0)}`;
-    }
 }
 </script>
 

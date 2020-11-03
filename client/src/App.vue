@@ -1,11 +1,11 @@
 <template>
     <v-app>
         <v-app-bar app color="primary" dark>
-            <v-toolbar-title>All things talk - {{ this.$route.name }}</v-toolbar-title>
+            <v-toolbar-title>{{ this.$route.name.toUpperCase() }}</v-toolbar-title>
             <v-spacer />
         </v-app-bar>
 
-        <navigation-drawer name="Vincent Class i" :items="items" />
+        <navigation-drawer :items="items" />
 
         <intro-stepper />
 
@@ -44,7 +44,6 @@ export default class App extends Vue {
         { title: 'Charts', icon: 'mdi-poll', link: '/' },
         { title: 'Map', icon: 'mdi-map', link: '/map' },
         { title: 'ATT - Orange', icon: 'mdi-web', link: '/att' },
-        { title: 'Settings', icon: 'mdi-cog-outline', link: 'settings' },
     ];
 
     onlineStatus = false;

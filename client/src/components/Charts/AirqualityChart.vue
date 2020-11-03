@@ -32,13 +32,17 @@ export default Vue.extend({
             return `${widthAirQuality}px`;
         },
     },
+
     data() {
         return {
             // Max, Curr, Min
-            series: [0, 0, 100],
+            series: [0, 0, 150],
             chartOptions: {
                 chart: {
                     type: 'radialBar',
+                },
+                tooltip: {
+                    shared: false,
                 },
                 plotOptions: {
                     radialBar: {
@@ -52,7 +56,10 @@ export default Vue.extend({
                             total: {
                                 show: true,
                                 label: 'Live - Air quality',
-                                formatter: (w: any) => w.globals.series[1],
+                                /* eslint-disable */
+                                formatter: (w: any) => {
+                                    return (w.globals.series[1] * 1.5).toFixed();
+                                },
                             },
                         },
                     },
@@ -66,11 +73,14 @@ export default Vue.extend({
         airquality(data: string) {
             const message: Airquality = JSON.parse(data);
             const value = Number(message.value.toFixed(2));
-            this.$data.series.splice(1, 1, value);
-            if (value <= this.$data.series[2]) {
-                this.$data.series.splice(2, 1, value);
-            } else if (value >= this.$data.series[0]) {
-                this.$data.series.splice(0, 1, value);
+            this.$data.series.splice(1, 1, (value / 1.5).toFixed(2));
+            console.log(value);
+            if ((value / 1.5) <= (this.$data.series[2])) {
+                this.$data.series.splice(2, 1, (value / 1.5).toFixed(2));
+            } else if ((value / 1.5) >= (this.$data.series[0])) {
+                console.log((value / 1.5))
+                console.log((this.$data.series[0] / 1.5))
+                this.$data.series.splice(0, 1, (value / 1.5).toFixed(2));
             }
         },
     },

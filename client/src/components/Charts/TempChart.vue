@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card-title class="justify-center pb-0">Temperature</v-card-title>
-        <apexchart height="130%" type="area"
+        <apexchart height="280px" type="area"
             :options="chartOptions" ref="temperatureChart" :series="series" />
     </div>
 
@@ -25,17 +25,17 @@ export default Vue.extend({
                 },
             ],
             chartOptions: {
-                // title: {
-                //     text: 'Temperature',
-                //     align: 'center',
-                //     margin: 50,
-                //     style: {
-                //         fontSize: '18px',
-                //     },
-                // },
                 yaxis: {
+                    title: {
+                        text: 'Temperature',
+                    },
                     max: 50,
                     min: -20,
+                },
+                xaxis: {
+                    title: {
+                        text: 'Time',
+                    },
                 },
                 chart: {
                     id: 'area-datetime',
@@ -50,9 +50,6 @@ export default Vue.extend({
                         dynamicAnimation: {
                             speed: 1000,
                         },
-                    },
-                    toolbar: {
-                        show: false,
                     },
                     stroke: {
                         curve: 'smooth',

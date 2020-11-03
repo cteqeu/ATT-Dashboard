@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card-title class="justify-center pb-0">Pressure</v-card-title>
-        <apexchart height="130%" :options="chartOptions" ref="pressureChart" :series="series" />
+        <apexchart height="280px" :options="chartOptions" ref="pressureChart" :series="series" />
     </div>
 </template>
 
@@ -52,6 +52,9 @@ export default Vue.extend({
                     enabled: false,
                 },
                 yaxis: {
+                    title: {
+                        text: 'Percentage',
+                    },
                     min: -5,
                     max: 5,
                     labels: {
@@ -67,6 +70,9 @@ export default Vue.extend({
                     },
                 },
                 xaxis: {
+                    title: {
+                        text: 'Time',
+                    },
                     categories: [],
                     labels: {
                         rotate: -90,

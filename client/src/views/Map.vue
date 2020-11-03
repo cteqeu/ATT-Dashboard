@@ -26,6 +26,8 @@ export default Vue.extend({
         gps(data: string) {
             const message = JSON.parse(data);
             const values = message.value;
+            // eslint-disable-next-line
+            // @ts-ignore
             this.markers.push(new Coordinate(values.altitude, values.latitude, values.longitude));
         },
     },

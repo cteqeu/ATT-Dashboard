@@ -1,12 +1,11 @@
 import eventlet
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
 from flask_bootstrap import Bootstrap
 from flask_cors import CORS, cross_origin
 from configuration import Config
-
 import psycopg2
 
 eventlet.monkey_patch()
@@ -45,7 +44,6 @@ humidityTable = bool(cur.rowcount)
 if not humidityTable:
     cur.execute('''CREATE TABLE humidity
         (
-            SENSOR CHAR(255) PRIMARY KEY    NOT NULL,
             VALUE           FLOAT           NOT NULL,
             TIMESTAMP       TIMESTAMP       NOT NULL
         ); ''')
@@ -56,7 +54,6 @@ pressureTable = bool(cur.rowcount)
 if not pressureTable:
     cur.execute('''CREATE TABLE pressure
         (
-            SENSOR CHAR(255) PRIMARY KEY    NOT NULL,
             VALUE           FLOAT           NOT NULL,
             TIMESTAMP       TIMESTAMP       NOT NULL
         ); ''')
@@ -67,7 +64,6 @@ temperatureTable = bool(cur.rowcount)
 if not temperatureTable:
     cur.execute('''CREATE TABLE temperature
         (
-            SENSOR CHAR(255) PRIMARY KEY    NOT NULL,
             VALUE           FLOAT           NOT NULL,
             TIMESTAMP       TIMESTAMP       NOT NULL
         ); ''')
@@ -78,8 +74,7 @@ airqualityTable = bool(cur.rowcount)
 if not airqualityTable:
     cur.execute('''CREATE TABLE airquality
         (
-            SENSOR CHAR(255) PRIMARY KEY    NOT NULL,
-            VALUE           INT             NOT NULL,
+            VALUE           FLOAT             NOT NULL,
             TIMESTAMP       TIMESTAMP       NOT NULL
         ); ''')
 
@@ -89,15 +84,13 @@ gpsTable = bool(cur.rowcount)
 if not gpsTable:
     cur.execute('''CREATE TABLE gps
         (
-            SENSOR CHAR(255) PRIMARY KEY    NOT NULL,
-            VALUE           TEXT []         NOT NULL,
-            TIMESTAMP       TIMESTAMP       NOT NULL
+            TIMESTAMP       TIMESTAMP       NOT NULL,
+            LAT             FLOAT           NOT NULL,
+            LONG            FLOAT           NOT NULL,
+            ALT             FLOAT           NOT NULL
         ); ''')
       
-
-print("Hallo")
 con.commit()
-con.close()
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
@@ -107,35 +100,89 @@ def handle_connect(client, userdata, flags, rc):
 def handle_unsubscribe_all():
     mqtt.unsubscribe_all()
 
+@app.route('/api/humidity', methods=['GET'])
+def humidity():
+    cur.execute("SELECT * FROM humidity")
+    records = cur.fetchall()
+    return jsonify(records)
+
+@app.route('/api/pressure', methods=['GET'])
+def pressure():
+    cur.execute("SELECT * FROM pressure")
+    records = cur.fetchall()
+    return jsonify(records)
+
+@app.route('/api/temperature', methods=['GET'])
+def temperature():
+    cur.execute("SELECT * FROM temperature")
+    records = cur.fetchall()
+    return jsonify(records)
+
+@app.route('/api/airquality', methods=['GET'])
+def airquality():
+    cur.execute("SELECT * FROM airquality")
+    records = cur.fetchall()
+    return jsonify(records)
+
+@app.route('/api/gps', methods=['GET'])
+def gps():
+    cur.execute("SELECT * FROM gps")
+    records = cur.fetchall()
+    return jsonify(records)
+
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
     payload = message.payload.decode()
-    print("Payload: " + payload)
-    if message.topic == topics.get("humidity"):
-        cur.execute("INSERT INTO humidity (SENSOR,VALUE,TIMESTAMP) VALUES (%s, %s, %s)",  (topics.get('humidity'), payload["value"], payload["at"]))
-        con.commit()
 
+    if message.topic == topics.get("humidity"):
         socketio.emit('humidity', data=payload)
+        payload_str = payload.split('"')
+        payload_val = payload_str[6][1:-1]
+        payload_time = payload_str[3]
+        cur.execute("INSERT INTO humidity (VALUE,TIMESTAMP) VALUES (%s, %s)",  (payload_val, payload_time))
+        con.commit()
         if DEBUG:
             print(message.payload.decode())
         
     elif message.topic == topics.get("pressure"):
         socketio.emit('pressure', data=payload)
+        payload_str = payload.split('"')
+        payload_val = payload_str[6][1:-1]
+        payload_time = payload_str[3]
+        cur.execute("INSERT INTO pressure (VALUE,TIMESTAMP) VALUES (%s, %s)",  (payload_val, payload_time))
+        con.commit()
         if DEBUG:
             print(message.payload.decode())
         
     elif message.topic == topics.get("temperature"):
         socketio.emit('temperature', data=payload)
+        payload_str = payload.split('"')
+        payload_val = payload_str[6][1:-1]
+        payload_time = payload_str[3]
+        cur.execute("INSERT INTO temperature (VALUE,TIMESTAMP) VALUES (%s, %s)",  (payload_val, payload_time))
+        con.commit()
         if DEBUG:
             print(message.payload.decode())
 
     elif message.topic == topics.get("airquality"):
         socketio.emit('airquality', data=payload)
+        payload_str = payload.split('"')
+        payload_val = payload_str[6][1:-1]
+        payload_time = payload_str[3]
+        cur.execute("INSERT INTO airquality (VALUE,TIMESTAMP) VALUES (%s, %s)",  (payload_val, payload_time))
+        con.commit()
         if DEBUG:
             print(message.payload.decode())
             
     elif message.topic == topics.get("gps"):
         socketio.emit('gps', data=payload)
+        payload_str = payload.split('"')
+        payload_time = payload_str[3]
+        payload_lat = payload_str[8][1:-1]
+        payload_long = payload_str[10][1:-2]
+        payload_alt = payload_str[12][1:-2]
+        cur.execute("INSERT INTO gps (TIMESTAMP,LAT,LONG,ALT) VALUES (%s, %s, %s, %s)",  (payload_time, payload_lat, payload_long, payload_alt))
+        con.commit()
         if DEBUG:
             print(message.payload.decode())
 
