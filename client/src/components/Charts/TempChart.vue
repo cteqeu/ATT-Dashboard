@@ -14,7 +14,6 @@ interface Temperature {
     at: string;
     value: number;
 }
-
 export default Vue.extend({
     data() {
         return {
@@ -25,7 +24,6 @@ export default Vue.extend({
                     data: [],
                 },
             ],
-
             chartOptions: {
                 // title: {
                 //     text: 'Temperature',
@@ -71,11 +69,9 @@ export default Vue.extend({
                     },
                 },
             },
-
             selection: 'one_year',
         };
     },
-
     methods: {
         updateChart() {
             this.$refs.temperatureChart.updateSeries([
@@ -83,7 +79,6 @@ export default Vue.extend({
                     data: this.$data.temperatureData,
                 },
             ]);
-
             this.$refs.temperatureChart.updateOptions({
                 xaxis: {
                     categories: this.$data.timestamps,
@@ -97,18 +92,15 @@ export default Vue.extend({
             this.updateChart();
         },
     },
-
     sockets: {
         temperature(data: string) {
             const message: Temperature = JSON.parse(data);
             const value = message.value.toFixed(2);
             const [timestamp, _] = new Date(message.at).toTimeString().split(' ');
-
             if (this.$data.temperatureData.length > 9) {
                 this.$data.temperatureData.shift();
                 this.$data.timestamps.shift();
             }
-
             this.$data.temperatureData.push(value);
             this.$data.timestamps.push(timestamp);
         },
