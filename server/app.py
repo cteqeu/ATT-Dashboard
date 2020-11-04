@@ -31,14 +31,10 @@ topics = {
     "motion": "device/" + ATT_DEVICE_ID + "/asset/motion/feed",
 }
 
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 mqtt = Mqtt(app)
-socketio = SocketIO(app, cors_allowed_origins='*')
+socketio = SocketIO(app, cors_allowed_origins='http://localhost:80')
 bootstrap = Bootstrap(app)
-
-# @app.route('/<path:path>')
-# def catch_all(path):
-#     return render_template("index.html")
 
 create_database(DEBUG=DEBUG)
 
@@ -62,6 +58,11 @@ def handle_unsubscribe_all():
 @app.route('/', methods=['GET'])
 def index():
     return render_template("index.html")
+
+@app.route('/<path:path>')
+def catch_all(path):
+    return render_template("index.html")
+
 
 @app.route('/api/humidity', methods=['GET'])
 def humidity():
@@ -202,4 +203,4 @@ def handle_mqtt_message(client, userdata, message):
 if __name__ == '__main__':
     # important: Do not use reloader because this will create two Flask instances.
     # Flask-MQTT only supports running with one instance
-    socketio.run(app, host='0.0.0.0', port=5000, use_reloader=False, debug=DEBUG)
+    socketio.run(app, host='0.0.0.0', port=80, use_reloader=False, debug=DEBUG)

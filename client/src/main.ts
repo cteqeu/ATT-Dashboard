@@ -11,7 +11,7 @@ import router from './router';
 import vuetify from './plugins/vuetify';
 
 Vue.prototype.$http = axios;
-Vue.prototype.$API_URL = 'http://localhost:5000';
+Vue.prototype.$API_URL = 'http://localhost:80';
 Vue.config.productionTip = false;
 
 Vue.component('apexchart', VueApexCharts);
@@ -29,7 +29,7 @@ L.Icon.Default.mergeOptions({
 Vue.use(VuePageTransition);
 Vue.use(
     new VueSocketIO({
-        debug: true,
+        debug: false,
         connection: SocketIO(Vue.prototype.$API_URL, {
             transportOptions: {
                 polling: {
