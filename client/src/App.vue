@@ -1,13 +1,10 @@
 <template>
     <v-app>
         <v-app-bar app color="primary" dark>
-            <v-toolbar-title>{{ this.$route.name.toUpperCase() }}</v-toolbar-title>
-            <v-spacer />
+            <v-toolbar-title>{{ this.$route.name }}</v-toolbar-title>
         </v-app-bar>
 
         <navigation-drawer :items="items" />
-
-        <intro-stepper />
 
         <Offline @detected-condition="handleConnectivityChange" />
 
@@ -30,12 +27,10 @@ import { Component, Vue } from 'vue-property-decorator';
 import Offline from 'v-offline';
 import { NavItems } from './types';
 import NavigationDrawer from './components/NavigationDrawer.vue';
-import IntroStepper from './components/IntroStepper.vue';
 
 @Component({
     components: {
         NavigationDrawer,
-        IntroStepper,
         Offline,
     },
 })

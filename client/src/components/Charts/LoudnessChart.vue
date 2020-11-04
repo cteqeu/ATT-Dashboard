@@ -1,29 +1,31 @@
 <template>
     <div>
-        <v-card-title class="justify-center pb-0">Air quality</v-card-title>
+        <v-card-title class="justify-center pb-0">Loudness</v-card-title>
 
         <apexchart :height="chartSize"
-            :options="chartOptions" ref="airqualityChart" :series="series"/>
+            :options="chartOptions" ref="loudnessChart" :series="series"/>
     </div>
 </template>
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
-import { Airquality } from '../../types';
+import { Loudness } from '../../types';
 
 export default Vue.extend({
     computed: {
         chartSize: () => {
             const width = window.innerWidth;
+            const height = window.innerHeight;
+
             const widthMain = width - 256;
 
-            const widthAirQuality = ((widthMain - 24) / 4);
-            const heightAirQuality = 340 - 20;
+            const widthLoudness = ((widthMain - 24) / 4);
+            const heightLoudness = 340 - 20;
 
-            if (widthAirQuality > heightAirQuality) {
-                return `${heightAirQuality}px`;
+            if (widthLoudness > heightLoudness) {
+                return `${heightLoudness}px`;
             }
-            return `${widthAirQuality}px`;
+            return `${widthLoudness}px`;
         },
     },
 
@@ -49,7 +51,7 @@ export default Vue.extend({
                             },
                             total: {
                                 show: true,
-                                label: 'Live - Air quality',
+                                label: 'Loudness (dB)',
                                 /* eslint-disable */
                                 formatter: (w: any) => {
                                     return (w.globals.series[1] * 1.5).toFixed();
@@ -64,13 +66,16 @@ export default Vue.extend({
     },
 
     sockets: {
-        airquality(data: string) {
-            const message: Airquality = JSON.parse(data);
+        loudness(data: string) {
+            const message: Loudness = JSON.parse(data);
             const value = Number(message.value.toFixed(2));
             this.$data.series.splice(1, 1, (value / 1.5).toFixed(2));
+            console.log(value);
             if ((value / 1.5) <= (this.$data.series[2])) {
                 this.$data.series.splice(2, 1, (value / 1.5).toFixed(2));
             } else if ((value / 1.5) >= (this.$data.series[0])) {
+                console.log((value / 1.5))
+                console.log((this.$data.series[0] / 1.5))
                 this.$data.series.splice(0, 1, (value / 1.5).toFixed(2));
             }
         },

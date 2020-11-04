@@ -1,19 +1,20 @@
 <template>
     <div>
-        <v-card-title class="justify-center pb-0">Temperature</v-card-title>
+        <v-card-title class="justify-center pb-0">Motion</v-card-title>
         <apexchart height="280px" type="area"
-            :options="chartOptions" ref="temperatureChart" :series="series" />
+            :options="chartOptions" ref="motionChart" :series="series" />
     </div>
+
 </template>
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
-import { Temperature } from '../../types';
+import { Motion } from '../../types';
 
 export default Vue.extend({
     data() {
         return {
-            temperatureData: [],
+            motionData: [],
             timestamps: [],
             series: [
                 {
@@ -23,10 +24,10 @@ export default Vue.extend({
             chartOptions: {
                 yaxis: {
                     title: {
-                        text: 'Temperature',
+                        text: 'Motion',
                     },
-                    max: 50,
-                    min: -20,
+                    max: 100,
+                    min: 0,
                 },
                 xaxis: {
                     title: {
@@ -67,12 +68,12 @@ export default Vue.extend({
     },
     methods: {
         updateChart() {
-            this.$refs.temperatureChart.updateSeries([
+            this.$refs.motionChart.updateSeries([
                 {
-                    data: this.$data.temperatureData,
+                    data: this.$data.motionData,
                 },
             ]);
-            this.$refs.temperatureChart.updateOptions({
+            this.$refs.motionChart.updateOptions({
                 xaxis: {
                     categories: this.$data.timestamps,
                 },
@@ -81,20 +82,20 @@ export default Vue.extend({
     },
     watch: {
         /* eslint-disable */
-        temperatureData: function() {
+        motionData: function() {
             this.updateChart();
         },
     },
     sockets: {
-        temperature(data: string) {
-            const message: Temperature = JSON.parse(data);
+        motion(data: string) {
+            const message: Motion = JSON.parse(data);
             const value = message.value.toFixed(2);
             const [timestamp, _] = new Date(message.at).toTimeString().split(' ');
-            if (this.$data.temperatureData.length > 9) {
-                this.$data.temperatureData.shift();
+            if (this.$data.motionData.length > 9) {
+                this.$data.motionData.shift();
                 this.$data.timestamps.shift();
             }
-            this.$data.temperatureData.push(value);
+            this.$data.motionData.push(value);
             this.$data.timestamps.push(timestamp);
         },
     },

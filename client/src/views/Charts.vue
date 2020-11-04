@@ -23,6 +23,9 @@
                 <PressureChart v-else-if="item.type === 'pressure' && isActive"/>
                 <AirqualityChart v-else-if="item.type === 'airquality' && isActive"/>
                 <HumidityChart v-else-if="item.type === 'humidity' && isActive" />
+                <LightChart v-else-if="item.type === 'light' && isActive" />
+                <LoudnessChart v-else-if="item.type === 'loudness' && isActive" />
+                <MotionChart v-else-if="item.type === 'motion' && isActive" />
             </v-card>
         </grid-item>
     </grid-layout>
@@ -35,6 +38,9 @@ import TempChart from '../components/Charts/TempChart.vue';
 import PressureChart from '../components/Charts/PressureChart.vue';
 import AirqualityChart from '../components/Charts/AirqualityChart.vue';
 import HumidityChart from '../components/Charts/HumidityChart.vue';
+import LightChart from '../components/Charts/LightChart.vue';
+import LoudnessChart from '../components/Charts/LoudnessChart.vue';
+import MotionChart from '../components/Charts/MotionChart.vue';
 
 export default Vue.extend({
     components: {
@@ -44,6 +50,9 @@ export default Vue.extend({
         PressureChart,
         AirqualityChart,
         HumidityChart,
+        LightChart,
+        LoudnessChart,
+        MotionChart,
     },
 
     mounted() {
@@ -68,7 +77,7 @@ export default Vue.extend({
                 },
                 {
                     type: 'pressure',
-                    x: 6,
+                    x: 3,
                     y: 7,
                     w: 6,
                     h: 7,
@@ -91,6 +100,33 @@ export default Vue.extend({
                     w: 6,
                     h: 7,
                     i: '3',
+                    static: false,
+                },
+                {
+                    type: 'loudness',
+                    x: 9,
+                    y: 7,
+                    w: 3,
+                    h: 7,
+                    i: '4',
+                    static: false,
+                },
+                {
+                    type: 'light',
+                    x: 0,
+                    y: 13,
+                    w: 6,
+                    h: 7,
+                    i: '5',
+                    static: false,
+                },
+                {
+                    type: 'motion',
+                    x: 6,
+                    y: 13,
+                    w: 6,
+                    h: 7,
+                    i: '6',
                     static: false,
                 },
             ],

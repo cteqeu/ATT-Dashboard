@@ -1,4 +1,3 @@
-
 # Parameters for SSL enabled
 # app.config['MQTT_BROKER_PORT'] = 8883
 # app.config['MQTT_TLS_ENABLED'] = True

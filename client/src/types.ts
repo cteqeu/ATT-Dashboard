@@ -14,6 +14,41 @@ interface Cell {
     type: string;
 }
 
+interface Loudness {
+    at: string;
+    value: number;
+}
+
+interface Motion {
+    at: string;
+    value: number;
+}
+
+interface Pressure {
+    at: string;
+    value: number;
+}
+
+interface Temperature {
+    at: string;
+    value: number;
+}
+
+interface Light {
+    at: string;
+    value: number;
+}
+
+interface Humidity {
+    at: string;
+    value: number;
+}
+
+interface Airquality {
+    at: string;
+    value: number;
+}
+
 class Coordinate {
     place: string;
 
@@ -28,4 +63,15 @@ class Coordinate {
     }
 }
 
-export { Coordinate, Cell, NavItems };
+export {
+    Coordinate,
+    Cell,
+    NavItems,
+    Temperature,
+    Pressure,
+    Motion,
+    Loudness,
+    Light,
+    Humidity,
+    Airquality,
+};

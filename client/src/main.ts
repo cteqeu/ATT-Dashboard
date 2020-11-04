@@ -9,9 +9,12 @@ import App from './App.vue';
 import 'leaflet/dist/leaflet.css';
 import router from './router';
 import vuetify from './plugins/vuetify';
-import store from './store';
 
 Vue.prototype.$http = axios;
+Vue.prototype.$API_URL = 'http://localhost:5000';
+Vue.config.productionTip = false;
+
+Vue.component('apexchart', VueApexCharts);
 
 /* eslint-disable */
 // @ts-ignore
@@ -24,12 +27,10 @@ L.Icon.Default.mergeOptions({
 });
 
 Vue.use(VuePageTransition);
-
-Vue.component('apexchart', VueApexCharts);
 Vue.use(
     new VueSocketIO({
         debug: true,
-        connection: SocketIO('http://localhost:5000', {
+        connection: SocketIO(Vue.prototype.$API_URL, {
             transportOptions: {
                 polling: {
                     extraHeaders: {
@@ -41,11 +42,8 @@ Vue.use(
     }),
 );
 
-Vue.config.productionTip = false;
-
 new Vue({
     router,
     vuetify,
-    store,
     render: (h) => h(App)
 }).$mount('#app');

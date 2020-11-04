@@ -27,6 +27,7 @@ import { Coordinate } from '../types';
         LPolyline,
     },
 })
+
 export default class MapCompontent extends Vue {
     // Props
     @Prop({ required: true, type: Array as PropType<Coordinate[]> })

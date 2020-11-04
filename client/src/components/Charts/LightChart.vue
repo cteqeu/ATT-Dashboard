@@ -1,11 +1,11 @@
 <template>
     <div>
-        <v-card-title class="justify-center pb-0">Humidity</v-card-title>
+        <v-card-title class="justify-center pb-0">Light</v-card-title>
         <apexchart
             type="area"
             height="280px"
             :options="chartOptions"
-            ref="humidityChart"
+            ref="lightChart"
             :series="series"
         />
     </div>
@@ -13,12 +13,12 @@
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
-import { Humidity } from '../../types';
+import { Light } from '../../types';
 
 export default Vue.extend({
     data() {
         return {
-            humidityData: [],
+            lightData: [],
             timestamps: [],
             series: [
                 {
@@ -54,9 +54,9 @@ export default Vue.extend({
                 },
                 yaxis: {
                     min: 0,
-                    max: 100,
+                    max: 200000,
                     labels: {
-                        formatter: (val: number) => val.toFixed(0),
+                        formatter: (val: any) => val.toFixed(0),
                     },
                     title: {
                         text: 'Percentage',
@@ -70,7 +70,7 @@ export default Vue.extend({
                 tooltip: {
                     shared: false,
                     y: {
-                        formatter: (val: number) => val.toFixed(0),
+                        formatter: (val: any) => val.toFixed(0),
                     },
                 },
             },
@@ -79,13 +79,13 @@ export default Vue.extend({
 
     methods: {
         updateChart() {
-            this.$refs.humidityChart.updateSeries([
+            this.$refs.lightChart.updateSeries([
                 {
-                    data: this.$data.humidityData,
+                    data: this.$data.lightData,
                 },
             ]);
 
-            this.$refs.humidityChart.updateOptions({
+            this.$refs.lightChart.updateOptions({
                 xaxis: {
                     categories: this.$data.timestamps,
                 },
@@ -94,23 +94,23 @@ export default Vue.extend({
     },
     watch: {
         /* eslint-disable */
-        humidityData: function() {
+        lightData: function() {
             this.updateChart();
         },
     },
 
     sockets: {
-        humidity(data: string) {
-            const message: Humidity = JSON.parse(data);
+        light(data: string) {
+            const message: Light = JSON.parse(data);
             const value = message.value.toFixed(2);
             const [timestamp, _] = new Date(message.at).toTimeString().split(' ');
 
-            if (this.$data.humidityData.length > 9) {
-                this.$data.humidityData.shift();
+            if (this.$data.lightData.length > 9) {
+                this.$data.lightData.shift();
                 this.$data.timestamps.shift();
             }
 
-            this.$data.humidityData.push(value);
+            this.$data.lightData.push(value);
             this.$data.timestamps.push(timestamp);
         },
     },

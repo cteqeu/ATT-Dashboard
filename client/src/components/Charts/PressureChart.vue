@@ -7,11 +7,7 @@
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
-
-interface Pressure {
-    at: string;
-    value: number;
-}
+import { Pressure } from '../../types';
 
 export default Vue.extend({
     data() {

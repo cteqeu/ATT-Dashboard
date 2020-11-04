@@ -13,22 +13,17 @@ export default Vue.extend({
     },
     data() {
         return {
-            markers: [],
+            markers: [] as Coordinate[],
         };
     },
-
-    mounted() {
-        this.markers.push(new Coordinate('PXL', 50.953245, 5.354043));
-        this.markers.push(new Coordinate('PXHell', 50.95175, 5.35055));
-    },
-
     sockets: {
         gps(data: string) {
             const message = JSON.parse(data);
             const values = message.value;
-            // eslint-disable-next-line
-            // @ts-ignore
-            this.markers.push(new Coordinate(values.altitude, values.latitude, values.longitude));
+
+            this.$data.markers.push(
+                new Coordinate(values.altitude, values.latitude, values.longitude),
+            );
         },
     },
 });
