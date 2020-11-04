@@ -35,13 +35,14 @@ topics = {
 
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 mqtt = Mqtt(app)
-socketio = SocketIO(app, cors_allowed_origins='http://localhost:80')
 bootstrap = Bootstrap(app)
 
 if not app.config['ENV'] == "production":
+    socketio = SocketIO(app, cors_allowed_origins='*')
     create_database(DEBUG=DEBUG)
     con = psycopg2.connect(database="att", user="11800991", password="admin123", host="127.0.0.1", port="5432")
 else:
+    socketio = SocketIO(app, cors_allowed_origins='http://att-dashboard.herokapp.com')
     dbUrl = urlparse.urlparse(os.environ['DATABASE_URL'])
     dbName = dbUrl.path[1:]
     dbUser = dbUrl.username
