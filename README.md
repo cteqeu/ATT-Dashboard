@@ -251,7 +251,7 @@ heroku git:remote -a my-app-name
 Push to heroku
 
 ```sh
-git push heroku master
+git subtree push --prefix server heroku master
 ```
 
 ## Contributors
