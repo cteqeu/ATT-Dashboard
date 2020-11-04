@@ -12,7 +12,7 @@ import vuetify from './plugins/vuetify';
 
 Vue.prototype.$http = axios;
 // Vue.prototype.$API_URL = `ws://${document.domain}:${window.location.port}`;
-Vue.prototype.$API_URL = 'https://0.0.0.0';
+Vue.prototype.$API_URL = '0.0.0.0';
 Vue.config.productionTip = false;
 
 Vue.component('apexchart', VueApexCharts);
