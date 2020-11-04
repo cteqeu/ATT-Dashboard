@@ -11,7 +11,7 @@ import router from './router';
 import vuetify from './plugins/vuetify';
 
 Vue.prototype.$http = axios;
-Vue.prototype.$API_URL = 'wss://0.0.0.0';
+Vue.prototype.$API_URL = `${window.location.protocol}//${document.domain}:${window.location.port}`;
 Vue.config.productionTip = false;
 
 Vue.component('apexchart', VueApexCharts);
