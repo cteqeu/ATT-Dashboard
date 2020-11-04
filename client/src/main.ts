@@ -31,6 +31,7 @@ Vue.use(
     new VueSocketIO({
         debug: false,
         connection: SocketIO(Vue.prototype.$API_URL, {
+            transports: ['websocket'],
             transportOptions: {
                 polling: {
                     extraHeaders: {
