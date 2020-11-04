@@ -9,10 +9,12 @@ from configuration import Config
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import psycopg2
 from DbTableConfig import create_tables, create_database
+import os
+import urllib.parse as urlparse
 
 eventlet.monkey_patch()
 
-DEBUG = True
+DEBUG = False
 
 app = Flask(__name__, static_folder = "./dist/static", template_folder="./dist")
 app.config.from_object(Config())
@@ -36,9 +38,17 @@ mqtt = Mqtt(app)
 socketio = SocketIO(app, cors_allowed_origins='http://localhost:80')
 bootstrap = Bootstrap(app)
 
-create_database(DEBUG=DEBUG)
-
-con = psycopg2.connect(database="att", user="11800991", password="admin123", host="127.0.0.1", port="5432")
+if not app.config['ENV'] == "production":
+    create_database(DEBUG=DEBUG)
+    con = psycopg2.connect(database="att", user="11800991", password="admin123", host="127.0.0.1", port="5432")
+else:
+    dbUrl = urlparse.urlparse(os.environ['DATABASE_URL'])
+    dbName = dbUrl.path[1:]
+    dbUser = dbUrl.username
+    dbPassword = dbUrl.password
+    dbHost = dbUrl.hostname
+    dbPort = dbUrl.port
+    con = psycopg2.connect(database=dbName, user=dbUser, password=dbPassword, host=dbHost, port=dbPort)
 
 if DEBUG:
     print("[INFO] - Connected to DB att.")
