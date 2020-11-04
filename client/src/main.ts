@@ -3,11 +3,18 @@ import L from 'leaflet';
 import VueSocketIO from 'vue-socket.io';
 import SocketIO from 'socket.io-client';
 import VueApexCharts from 'vue-apexcharts';
+import VuePageTransition from 'vue-page-transition';
+import axios from 'axios';
 import App from './App.vue';
-// Import the whole Leaflet CSS
 import 'leaflet/dist/leaflet.css';
 import router from './router';
 import vuetify from './plugins/vuetify';
+
+Vue.prototype.$http = axios;
+Vue.prototype.$API_URL = 'http://localhost:80';
+Vue.config.productionTip = false;
+
+Vue.component('apexchart', VueApexCharts);
 
 /* eslint-disable */
 // @ts-ignore
@@ -19,25 +26,24 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-Vue.component('apexchart', VueApexCharts);
-Vue.use(new VueSocketIO({
-    debug: true,
-    connection: SocketIO('http://localhost:5000', {
-        transportOptions: {
-            polling: {
-                extraHeaders: {
-                  Authorization: 'cQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s'
-                }
-              }
-        }
-    }), //options object is Optional
-  })
+Vue.use(VuePageTransition);
+Vue.use(
+    new VueSocketIO({
+        debug: false,
+        connection: SocketIO(Vue.prototype.$API_URL, {
+            transportOptions: {
+                polling: {
+                    extraHeaders: {
+                        Authorization: 'cQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s',
+                    },
+                },
+            },
+        }),
+    }),
 );
-
-Vue.config.productionTip = false;
 
 new Vue({
     router,
     vuetify,
-    render: (h) => h(App),
+    render: (h) => h(App)
 }).$mount('#app');

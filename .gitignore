@@ -1,10 +1,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,node,vscode,vue,python,flask
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,node,vscode,vue,python,flask
-
+db.env
 ### Flask ###
 instance/*
 !instance/.gitignore
 .webassets-cache
+server/Pipfile.lock
 
 ### Flask.Python Stack ###
 # Byte-compiled / optimized / DLL files
@@ -19,7 +20,6 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -270,7 +270,6 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Gatsby files
 .cache/

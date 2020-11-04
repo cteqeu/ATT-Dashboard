@@ -2,9 +2,8 @@
     <div class="map-wrapper">
         <l-map id="map" :zoom="zoom" :center="center" :options="mapOptions">
             <l-tile-layer :url="url" :attribution="attribution" />
-            <l-marker v-for="(marker, i) in markers"
-                :key="i" :lat-lng="[marker.lat, marker.long]">
-                <l-popup>{{ marker.place }}</l-popup>
+            <l-marker v-for="(marker, i) in markers" :key="i" :lat-lng="[marker.lat, marker.long]">
+                <l-popup>Altitude : {{ marker.place }}</l-popup>
             </l-marker>
             <l-polyline :lat-lngs="polylines" color="blue" />
         </l-map>
@@ -16,7 +15,7 @@ import { Prop, Vue, Component } from 'vue-property-decorator';
 import { PropType } from 'vue';
 import { latLng } from 'leaflet';
 import { LMap, LTileLayer, LMarker, LPopup, LTooltip, LPolyline } from 'vue2-leaflet';
-import { Coordinate } from './Map/MapTypes';
+import { Coordinate } from '../types';
 
 @Component({
     components: {
@@ -51,7 +50,7 @@ export default class MapCompontent extends Vue {
 
     get polylines() {
         /* eslint-disable */
-        const filtered:any = [];
+        const filtered: any = [];
         this.markers.forEach((marker) => filtered.push([marker.lat, marker.long]));
         return filtered;
     }

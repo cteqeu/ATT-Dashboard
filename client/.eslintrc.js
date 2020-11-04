@@ -17,7 +17,7 @@ module.exports = {
     settings: {
         'import/resolver': {
             node: {
-                extensions: ['.js', '.jsx', '.vue', 'ts'],
+                extensions: ['.js', '.vue', 'ts'],
             },
         },
     },

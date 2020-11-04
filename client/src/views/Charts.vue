@@ -4,7 +4,7 @@
         :is-draggable="true"
         :is-resizable="false"
         :layout="layout"
-        :row-height="30"
+        :row-height="40"
         :use-css-transforms="true"
         :vertical-compact="true"
     >
@@ -18,89 +18,123 @@
             :x="item.x"
             :y="item.y"
         >
-            <v-card align="center" height="100%">
-                <LightChart />
+            <v-card :loading="!isActive" align="center" height="100%">
+                <TempChart v-if="item.type === 'temperature' && isActive"/>
+                <PressureChart v-else-if="item.type === 'pressure' && isActive"/>
+                <AirqualityChart v-else-if="item.type === 'airquality' && isActive"/>
+                <HumidityChart v-else-if="item.type === 'humidity' && isActive" />
+                <LightChart v-else-if="item.type === 'light' && isActive" />
+                <LoudnessChart v-else-if="item.type === 'loudness' && isActive" />
+                <MotionChart v-else-if="item.type === 'motion' && isActive" />
             </v-card>
         </grid-item>
     </grid-layout>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Vue } from 'vue-property-decorator';
 import { GridItem, GridLayout } from 'vue-grid-layout';
+import TempChart from '../components/Charts/TempChart.vue';
+import PressureChart from '../components/Charts/PressureChart.vue';
+import AirqualityChart from '../components/Charts/AirqualityChart.vue';
+import HumidityChart from '../components/Charts/HumidityChart.vue';
 import LightChart from '../components/Charts/LightChart.vue';
+import LoudnessChart from '../components/Charts/LoudnessChart.vue';
+import MotionChart from '../components/Charts/MotionChart.vue';
 
-interface Icell {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-    i: string;
-    static: boolean;
-}
-
-@Component({
+export default Vue.extend({
     components: {
         GridItem,
         GridLayout,
+        TempChart,
+        PressureChart,
+        AirqualityChart,
+        HumidityChart,
         LightChart,
+        LoudnessChart,
+        MotionChart,
     },
-})
-export default class Charts extends Vue {
-    index = 0;
 
-    layout: Icell[] = [
-        {
-            x: 0,
-            y: 0,
-            w: 6,
-            h: 11,
-            i: '0',
-            static: false,
-        },
-        {
-            x: 6,
-            y: 7,
-            w: 6,
-            h: 11,
-            i: '1',
-            static: false,
-        },
-        {
-            x: 0,
-            y: 12,
-            w: 3,
-            h: 7,
-            i: '2',
-            static: false,
-        },
-        {
-            x: 3,
-            y: 12,
-            w: 3,
-            h: 7,
-            i: '3',
-            static: false,
-        },
-        {
-            x: 6,
-            y: 0,
-            w: 3,
-            h: 7,
-            i: '4',
-            static: false,
-        },
-        {
-            x: 9,
-            y: 0,
-            w: 3,
-            h: 7,
-            i: '5',
-            static: false,
-        },
-    ];
-}
+    mounted() {
+        setTimeout(() => {
+            this.isActive = true;
+        }, 1000);
+    },
+
+    data() {
+        return {
+            isActive: false,
+            index: 0,
+            layout: [
+                {
+                    type: 'temperature',
+                    x: 0,
+                    y: 0,
+                    w: 6,
+                    h: 7,
+                    i: '0',
+                    static: false,
+                },
+                {
+                    type: 'pressure',
+                    x: 3,
+                    y: 7,
+                    w: 6,
+                    h: 7,
+                    i: '1',
+                    static: false,
+                },
+                {
+                    type: 'airquality',
+                    x: 0,
+                    y: 12,
+                    w: 3,
+                    h: 7,
+                    i: '2',
+                    static: false,
+                },
+                {
+                    type: 'humidity',
+                    x: 6,
+                    y: 0,
+                    w: 6,
+                    h: 7,
+                    i: '3',
+                    static: false,
+                },
+                {
+                    type: 'loudness',
+                    x: 9,
+                    y: 7,
+                    w: 3,
+                    h: 7,
+                    i: '4',
+                    static: false,
+                },
+                {
+                    type: 'light',
+                    x: 0,
+                    y: 13,
+                    w: 6,
+                    h: 7,
+                    i: '5',
+                    static: false,
+                },
+                {
+                    type: 'motion',
+                    x: 6,
+                    y: 13,
+                    w: 6,
+                    h: 7,
+                    i: '6',
+                    static: false,
+                },
+            ],
+        };
+    },
+});
 </script>
+
 <style lang="scss" scoped>
 .vue-grid-layout {
     background: transparent;

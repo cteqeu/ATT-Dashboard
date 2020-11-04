@@ -7,14 +7,14 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
-paho-mqtt = "*"
 flask-cors = "*"
 flask-socketio = "*"
-gevent = "*"
-gevent-websocket = "*"
 eventlet = "*"
 flask-mqtt = "*"
 flask-bootstrap = "*"
+psycopg2-binary = "*"
+paho-mqtt = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.8"
