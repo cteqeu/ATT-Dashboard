@@ -11,7 +11,7 @@ import router from './router';
 import vuetify from './plugins/vuetify';
 
 Vue.prototype.$http = axios;
-Vue.prototype.$API_URL = 'http://att-dashboard.herokuapp.com/';
+Vue.prototype.$API_URL = 'ws://att-dashboard.herokuapp.com/';
 Vue.config.productionTip = false;
 
 Vue.component('apexchart', VueApexCharts);
