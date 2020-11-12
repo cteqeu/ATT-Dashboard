@@ -3,7 +3,9 @@
         <v-app-bar app color="primary" dark>
             <v-toolbar-title>{{ this.$route.name }}</v-toolbar-title>
             <v-spacer />
-            <v-btn @click="downloadCSV()" color="white" text>Download csv</v-btn>
+            <v-btn v-if="$route.name === 'Charts'" @click="downloadCSV()" color="white" text
+                >Download csv</v-btn
+            >
         </v-app-bar>
 
         <navigation-drawer :items="items" />
