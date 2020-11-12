@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <v-card :loading="loading" align="center" height="100%">
         <v-card-title class="justify-center pb-0">Pressure</v-card-title>
         <apexchart height="280px" :options="chartOptions" ref="pressureChart" :series="series" />
-    </div>
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -12,6 +12,7 @@ import { Pressure } from '../../types';
 export default Vue.extend({
     data() {
         return {
+            loading: false,
             pressureData: [],
             timestamps: [],
             series: [

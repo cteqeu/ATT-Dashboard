@@ -1,10 +1,14 @@
 <template>
-    <div>
+    <v-card :loading="loading" align="center" height="100%">
         <v-card-title class="justify-center pb-0">Loudness</v-card-title>
 
-        <apexchart :height="chartSize"
-            :options="chartOptions" ref="loudnessChart" :series="series"/>
-    </div>
+        <apexchart
+            :height="chartSize"
+            :options="chartOptions"
+            ref="loudnessChart"
+            :series="series"
+        />
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -19,7 +23,7 @@ export default Vue.extend({
 
             const widthMain = width - 256;
 
-            const widthLoudness = ((widthMain - 24) / 4);
+            const widthLoudness = (widthMain - 24) / 4;
             const heightLoudness = 340 - 20;
 
             if (widthLoudness > heightLoudness) {
@@ -31,6 +35,7 @@ export default Vue.extend({
 
     data() {
         return {
+            loading: false,
             // Max, Curr, Min
             series: [0, 0, 150],
             chartOptions: {
@@ -71,11 +76,11 @@ export default Vue.extend({
             const value = Number(message.value.toFixed(2));
             this.$data.series.splice(1, 1, (value / 1.5).toFixed(2));
             console.log(value);
-            if ((value / 1.5) <= (this.$data.series[2])) {
+            if (value / 1.5 <= this.$data.series[2]) {
                 this.$data.series.splice(2, 1, (value / 1.5).toFixed(2));
-            } else if ((value / 1.5) >= (this.$data.series[0])) {
-                console.log((value / 1.5))
-                console.log((this.$data.series[0] / 1.5))
+            } else if (value / 1.5 >= this.$data.series[0]) {
+                console.log(value / 1.5);
+                console.log(this.$data.series[0] / 1.5);
                 this.$data.series.splice(0, 1, (value / 1.5).toFixed(2));
             }
         },

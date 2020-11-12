@@ -15,6 +15,7 @@ flask-bootstrap = "*"
 psycopg2-binary = "*"
 paho-mqtt = "*"
 gunicorn = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.8"

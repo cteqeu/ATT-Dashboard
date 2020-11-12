@@ -18,15 +18,13 @@
             :x="item.x"
             :y="item.y"
         >
-            <v-card :loading="!isActive" align="center" height="100%">
-                <TempChart v-if="item.type === 'temperature' && isActive"/>
-                <PressureChart v-else-if="item.type === 'pressure' && isActive"/>
-                <AirqualityChart v-else-if="item.type === 'airquality' && isActive"/>
-                <HumidityChart v-else-if="item.type === 'humidity' && isActive" />
-                <LightChart v-else-if="item.type === 'light' && isActive" />
-                <LoudnessChart v-else-if="item.type === 'loudness' && isActive" />
-                <MotionChart v-else-if="item.type === 'motion' && isActive" />
-            </v-card>
+            <TempChart v-if="item.type === 'temperature' && isActive" />
+            <PressureChart v-else-if="item.type === 'pressure' && isActive" />
+            <AirqualityChart v-else-if="item.type === 'airquality' && isActive" />
+            <HumidityChart v-else-if="item.type === 'humidity' && isActive" />
+            <LightChart v-else-if="item.type === 'light' && isActive" />
+            <LoudnessChart v-else-if="item.type === 'loudness' && isActive" />
+            <MotionChart v-else-if="item.type === 'motion' && isActive" />
         </grid-item>
     </grid-layout>
 </template>

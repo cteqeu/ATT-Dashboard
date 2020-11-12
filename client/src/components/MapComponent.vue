@@ -3,7 +3,14 @@
         <l-map id="map" :zoom="zoom" :center="center" :options="mapOptions">
             <l-tile-layer :url="url" :attribution="attribution" />
             <l-marker v-for="(marker, i) in markers" :key="i" :lat-lng="[marker.lat, marker.long]">
-                <l-popup>Altitude : {{ marker.place }}</l-popup>
+                <l-popup>
+                    <ul>
+                        <li>Altitude : {{ marker.alt.toFixed(2) }}</li>
+                        <li>Latitude : {{ marker.lat.toFixed(2) }}</li>
+                        <li>Longtude : {{ marker.long.toFixed(2) }}</li>
+                        <li>Air Quality : {{ marker.airquality.toFixed(2) }}</li>
+                    </ul>
+                </l-popup>
             </l-marker>
             <l-polyline :lat-lngs="polylines" color="blue" />
         </l-map>
@@ -27,7 +34,6 @@ import { Coordinate } from '../types';
         LPolyline,
     },
 })
-
 export default class MapCompontent extends Vue {
     // Props
     @Prop({ required: true, type: Array as PropType<Coordinate[]> })

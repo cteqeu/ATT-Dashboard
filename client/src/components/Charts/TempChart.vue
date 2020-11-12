@@ -1,9 +1,14 @@
 <template>
-    <div>
+    <v-card :loading="loading" align="center" height="100%">
         <v-card-title class="justify-center pb-0">Temperature</v-card-title>
-        <apexchart height="280px" type="area"
-            :options="chartOptions" ref="temperatureChart" :series="series" />
-    </div>
+        <apexchart
+            height="280px"
+            type="area"
+            :options="chartOptions"
+            ref="temperatureChart"
+            :series="series"
+        />
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -13,6 +18,7 @@ import { Temperature } from '../../types';
 export default Vue.extend({
     data() {
         return {
+            loading: false,
             temperatureData: [],
             timestamps: [],
             series: [
@@ -64,6 +70,33 @@ export default Vue.extend({
             },
             selection: 'one_year',
         };
+    },
+    created() {
+        this.loading = true;
+        this.$http
+            .get('http://localhost:3000/api/temperature/10')
+            .then((response) => {
+                console.log(response.data);
+                this.temperatureData = response.data.map((el) => el.value.toFixed(2));
+                this.timestamps = response.data.map((el) => {
+                    const date = new Date(el.timestamp);
+                    /* eslint-disable */
+                    const dateStr =
+                        ('00' + date.getHours()).slice(-2) +
+                        ':' +
+                        ('00' + date.getMinutes()).slice(-2) +
+                        ':' +
+                        ('00' + date.getSeconds()).slice(-2);
+
+                    console.log(dateStr);
+                    return dateStr;
+                });
+                this.updateChart();
+                this.loading = false;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     },
     methods: {
         updateChart() {

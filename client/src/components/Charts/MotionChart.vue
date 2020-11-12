@@ -1,10 +1,14 @@
 <template>
-    <div>
+    <v-card :loading="loading" align="center" height="100%">
         <v-card-title class="justify-center pb-0">Motion</v-card-title>
-        <apexchart height="280px" type="area"
-            :options="chartOptions" ref="motionChart" :series="series" />
-    </div>
-
+        <apexchart
+            height="280px"
+            type="area"
+            :options="chartOptions"
+            ref="motionChart"
+            :series="series"
+        />
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -14,6 +18,7 @@ import { Motion } from '../../types';
 export default Vue.extend({
     data() {
         return {
+            loading: false,
             motionData: [],
             timestamps: [],
             series: [

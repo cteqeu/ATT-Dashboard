@@ -17,6 +17,23 @@ def create_tables(cur, DEBUG):
         if DEBUG:
             print("[INFO] - Humidity exists")
 
+    cur.execute("select * from information_schema.tables where table_name=%s", ('particles',))
+    particles = bool(cur.rowcount)
+
+    if not particles:
+        if DEBUG:
+            print("[INFO] - CREATING TABLE particles")
+        cur.execute('''CREATE TABLE particles
+            (
+                PM1            INTEGER          NOT NULL,
+                PM10           INTEGER          NOT NULL,
+                PM25           INTEGER          NOT NULL,
+                TIMESTAMP      TIMESTAMP        NOT NULL
+            ); ''')
+    else:
+        if DEBUG:
+            print("[INFO] - particles exists")
+
     cur.execute("select * from information_schema.tables where table_name=%s", ('pressure',))
     pressureTable = bool(cur.rowcount)
 

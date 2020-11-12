@@ -50,16 +50,19 @@ interface Airquality {
 }
 
 class Coordinate {
-    place: string;
+    alt: number;
 
     lat: number;
 
     long: number;
 
-    constructor(place: string, lat: number, long: number) {
-        this.place = place;
+    airquality?: number;
+
+    constructor(alt: number, lat: number, long: number, airquality: number) {
+        this.alt = alt;
         this.lat = lat;
         this.long = long;
+        this.airquality = airquality;
     }
 }
 

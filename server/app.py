@@ -1,6 +1,6 @@
 import eventlet
 import json
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, send_from_directory
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
 from flask_bootstrap import Bootstrap
@@ -11,6 +11,9 @@ import psycopg2
 from DbTableConfig import create_tables, create_database
 import os
 import urllib.parse as urlparse
+from psycopg2.extras import RealDictCursor
+import pandas
+import zipfile
 
 eventlet.monkey_patch()
 
@@ -31,9 +34,17 @@ topics = {
     "loudness": "device/" + ATT_DEVICE_ID + "/asset/loudness/feed",
     "light": "device/" + ATT_DEVICE_ID + "/asset/light/feed",
     "motion": "device/" + ATT_DEVICE_ID + "/asset/motion/feed",
+    "pm1": "device/" + ATT_DEVICE_ID + "/asset/pm1/feed",
+    "pm10": "device/" + ATT_DEVICE_ID + "/asset/pm10/feed",
+    "pm25": "device/" + ATT_DEVICE_ID + "/asset/pm25/feed",
 }
 
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+if not app.config['ENV'] == "production":
+    cors = CORS(app, resources={r"*": {"origins": "*"}})
+else:
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+
 mqtt = Mqtt(app)
 bootstrap = Bootstrap(app)
 
@@ -54,9 +65,15 @@ else:
 if DEBUG:
     print("[INFO] - Connected to DB att.")
     
-cur = con.cursor()
+cur = con.cursor(cursor_factory=RealDictCursor)
 con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 create_tables(cur=cur, DEBUG=DEBUG)
+
+def zipdir(path, ziph):
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            ziph.write(os.path.join(root, file))
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
@@ -74,57 +91,111 @@ def index():
 def catch_all(path):
     return render_template("index.html")
 
+def createCSVFile(sensor):
+    fn = "export/" + sensor + '.csv'
+    cur.execute("SELECT * FROM " + sensor)
+    records = cur.fetchall()
+    pandas.DataFrame(records).to_csv(fn, index=False)
+
+
+@app.route('/api/download', methods=['GET'])
+def export_csv():
+    createCSVFile('temperature')
+    createCSVFile('humidity')
+    createCSVFile('pressure')
+    createCSVFile('airquality')
+    createCSVFile('gps')
+    createCSVFile('light')
+    createCSVFile('gps')
+    createCSVFile('loudness')
+    createCSVFile('motion')
+
+    zipf = zipfile.ZipFile('archives/export.zip', 'w', zipfile.ZIP_DEFLATED)
+    zipdir('export/', zipf)
+    zipf.close()
+    return send_from_directory('archives', 'export.zip', attachment_filename='export.zip', as_attachment=True)
 
 @app.route('/api/humidity', methods=['GET'])
 def humidity():
     cur.execute("SELECT * FROM humidity")
-    records = cur.fetchall()
-    return jsonify(records)
+    return jsonify(cur.fetchall())
 
 @app.route('/api/pressure', methods=['GET'])
 def pressure():
     cur.execute("SELECT * FROM pressure")
-    records = cur.fetchall()
-    return jsonify(records)
+    return jsonify(cur.fetchall())
 
 @app.route('/api/temperature', methods=['GET'])
 def temperature():
     cur.execute("SELECT * FROM temperature")
-    records = cur.fetchall()
-    return jsonify(records)
+    return jsonify(cur.fetchall())
 
 @app.route('/api/airquality', methods=['GET'])
 def airquality():
     cur.execute("SELECT * FROM airquality")
-    records = cur.fetchall()
-    return jsonify(records)
+    return jsonify(cur.fetchall())
 
 @app.route('/api/gps', methods=['GET'])
 def gps():
     cur.execute("SELECT * FROM gps")
-    records = cur.fetchall()
-    return jsonify(records)
-
+    return jsonify(cur.fetchall())
 
 @app.route('/api/light', methods=['GET'])
 def light():
     cur.execute("SELECT * FROM light")
-    records = cur.fetchall()
-    return jsonify(records)
-
+    return jsonify(cur.fetchall())
 
 @app.route('/api/loudness', methods=['GET'])
 def loudness():
     cur.execute("SELECT * FROM loudness")
-    records = cur.fetchall()
-    return jsonify(records)
-
+    return jsonify(cur.fetchall())
 
 @app.route('/api/motion', methods=['GET'])
 def motion():
     cur.execute("SELECT * FROM motion")
-    records = cur.fetchall()
-    return jsonify(records)
+    return jsonify(cur.fetchall())
+
+
+@app.route('/api/humidity/<amount>', methods=['GET'])
+def humidityAm(amount):
+    cur.execute("SELECT * FROM humidity ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+    return jsonify(cur.fetchall())
+
+@app.route('/api/pressure/<amount>', methods=['GET'])
+def pressureAm(amount):
+    cur.execute("SELECT * FROM pressure ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+    return jsonify(cur.fetchall())
+
+@app.route('/api/temperature/<amount>', methods=['GET'])
+def temperatureAm(amount):
+    cur.execute("SELECT * FROM temperature ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+    return jsonify(cur.fetchall())
+
+@app.route('/api/airquality/<amount>', methods=['GET'])
+def airqualityAm(amount):
+    cur.execute("SELECT * FROM airquality ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+    return jsonify(cur.fetchall())
+
+@app.route('/api/gps/<amount>', methods=['GET'])
+def gpsAm(amount):
+    cur.execute("SELECT * FROM gps ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+    return jsonify(cur.fetchall())
+
+@app.route('/api/light/<amount>', methods=['GET'])
+def lightAm(amount):
+    cur.execute("SELECT * FROM light ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+    return jsonify(cur.fetchall())
+
+@app.route('/api/loudness/<amount>', methods=['GET'])
+def loudnessAm(amount):
+    cur.execute("SELECT * FROM loudness ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+    return jsonify(cur.fetchall())
+
+@app.route('/api/motion/<amount>', methods=['GET'])
+def motionAm(amount):
+    cur.execute("SELECT * FROM motion ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+    return jsonify(cur.fetchall())
+
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
@@ -168,7 +239,7 @@ def handle_mqtt_message(client, userdata, message):
         con.commit()
         if DEBUG:
             print("Airquality:" + message.payload.decode())
-            
+
     elif message.topic == topics.get("gps"):
         socketio.emit('gps', data=payload)
         payload_str = payload.split('"')
@@ -211,7 +282,13 @@ def handle_mqtt_message(client, userdata, message):
         if DEBUG:
             print("Motion:" + message.payload.decode())
 
+    
+    else:
+        print(message.payload.decode())
+        print("Hello")
+
+
 if __name__ == '__main__':
     # important: Do not use reloader because this will create two Flask instances.
     # Flask-MQTT only supports running with one instance
-    socketio.run(app, host='0.0.0.0', port=80, use_reloader=False, debug=DEBUG)
+    socketio.run(app, host='0.0.0.0', port=app.config['PORT'], use_reloader=False, debug=DEBUG)

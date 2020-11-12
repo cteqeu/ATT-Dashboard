@@ -1,10 +1,8 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
-    transpileDependencies: [
-        'vuetify',
-    ],
-    outputDir: "../server/dist",
+    transpileDependencies: ['vuetify'],
+    outputDir: '../server/dist',
     // relative to outputDir
-    assetsDir: "static"
+    assetsDir: 'static',
 };

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-card :loading="loading" align="center" height="100%">
         <v-card-title class="justify-center pb-0">Light</v-card-title>
         <apexchart
             type="area"
@@ -8,7 +8,7 @@
             ref="lightChart"
             :series="series"
         />
-    </div>
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -18,6 +18,7 @@ import { Light } from '../../types';
 export default Vue.extend({
     data() {
         return {
+            loading: false,
             lightData: [],
             timestamps: [],
             series: [
