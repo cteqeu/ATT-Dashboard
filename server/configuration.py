@@ -16,8 +16,8 @@
 
 
 class Config(object):
-    ENV = "production"
-    PORT = 80
+    ENV = "dev"
+    PORT = 3000
     ATT_DEVICE_ID = "fO7K0gYRpEMJmY1PDy5cSpzh"
     SECRET = 'cQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s'
     TEMPLATES_AUTO_RELOAD = True

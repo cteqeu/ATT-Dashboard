@@ -95,8 +95,8 @@ def zipdir(path, ziph):
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
-    print("subscribed")
     mqtt.subscribe(ATT_SUB_TOPIC)
+    
     
 @mqtt.on_log()
 def handle_logging(client, userdata, level, buf):
