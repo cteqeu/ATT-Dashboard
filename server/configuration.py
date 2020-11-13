@@ -16,7 +16,7 @@
 
 
 class Config(object):
-    ENV = "dev"
+    ENV = "production"
     PORT = 80
     ATT_DEVICE_ID = "fO7K0gYRpEMJmY1PDy5cSpzh"
     SECRET = 'cQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s'
