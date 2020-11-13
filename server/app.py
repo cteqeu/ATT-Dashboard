@@ -69,7 +69,7 @@ if not app.config['ENV'] == "production":
     con = psycopg2.connect(database="att", user="11800991",
                            password="admin123", host="127.0.0.1", port="5432")
 else:
-    socketio = SocketIO(app)
+    socketio = SocketIO(app, cors_allowed_origins='*', async_mode="eventlet")
     dbUrl = urlparse.urlparse(os.environ['DATABASE_URL'])
     dbName = dbUrl.path[1:]
     dbUser = dbUrl.username
@@ -85,6 +85,7 @@ if DEBUG:
 cur = con.cursor(cursor_factory=RealDictCursor)
 con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 create_tables(cur=cur, DEBUG=DEBUG)
+k = 10
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
@@ -95,7 +96,6 @@ def zipdir(path, ziph):
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
-    print("subscribed")
     mqtt.subscribe(ATT_SUB_TOPIC)
     
 
@@ -111,6 +111,11 @@ def index():
 
 @app.route('/<path:path>')
 def catch_all(path):
+    global k
+    while not k == 0:
+        print("Emitting data")
+        socketio.emit('test', data="test")
+        k = k-1
     return render_template("index.html")
 
 
@@ -257,7 +262,6 @@ def particlesAm(amount):
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
-    print(message)
     global COUNTER
     payload = message.payload.decode()
 
