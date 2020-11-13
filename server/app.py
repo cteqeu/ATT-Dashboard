@@ -95,6 +95,7 @@ def zipdir(path, ziph):
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
+    print("subscribed")
     mqtt.subscribe(ATT_SUB_TOPIC)
     
 
@@ -256,6 +257,7 @@ def particlesAm(amount):
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
+    print(message)
     global COUNTER
     payload = message.payload.decode()
 
