@@ -85,7 +85,6 @@ if DEBUG:
 cur = con.cursor(cursor_factory=RealDictCursor)
 con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 create_tables(cur=cur, DEBUG=DEBUG)
-k = 10
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
@@ -96,8 +95,12 @@ def zipdir(path, ziph):
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
+    print("subscribed")
     mqtt.subscribe(ATT_SUB_TOPIC)
     
+@mqtt.on_log()
+def handle_logging(client, userdata, level, buf):
+    print('Error: {}'.format(buf))
 
 @socketio.on('unsubscribe_all')
 def handle_unsubscribe_all():
@@ -111,11 +114,6 @@ def index():
 
 @app.route('/<path:path>')
 def catch_all(path):
-    global k
-    while not k == 0:
-        print("Emitting data")
-        socketio.emit('test', data="test")
-        k = k-1
     return render_template("index.html")
 
 
@@ -262,6 +260,7 @@ def particlesAm(amount):
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
+    print(client)
     global COUNTER
     payload = message.payload.decode()
 
