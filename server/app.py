@@ -85,7 +85,6 @@ if DEBUG:
 cur = con.cursor(cursor_factory=RealDictCursor)
 con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 create_tables(cur=cur, DEBUG=DEBUG)
-k = 10
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
@@ -111,11 +110,6 @@ def index():
 
 @app.route('/<path:path>')
 def catch_all(path):
-    global k
-    while not k == 0:
-        print("Emitting data")
-        socketio.emit('test', data="test")
-        k = k-1
     return render_template("index.html")
 
 
