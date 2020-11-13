@@ -80,28 +80,28 @@ export default Vue.extend({
     },
 
     created() {
-        this.loading = true;
-        axios
-            .get('http://localhost:3000/api/humidity/10')
-            .then((response: any) => {
-                this.humidityData = response.data.map((el: any) => el.value.toFixed(2));
-                this.timestamps = response.data.map((el: any) => {
-                    const date = new Date(el.timestamp);
-                    /* eslint-disable */
-                    const dateStr =
-                        ('00' + date.getHours()).slice(-2) +
-                        ':' +
-                        ('00' + date.getMinutes()).slice(-2) +
-                        ':' +
-                        ('00' + date.getSeconds()).slice(-2);
-                    return dateStr;
-                });
-                this.updateChart();
-                this.loading = false;
-            })
-            .catch((error: any) => {
-                console.log(error);
-            });
+        // this.loading = true;
+        // axios
+        //     .get('http://localhost:3000/api/humidity/10')
+        //     .then((response: any) => {
+        //         this.humidityData = response.data.map((el: any) => el.value.toFixed(2));
+        //         this.timestamps = response.data.map((el: any) => {
+        //             const date = new Date(el.timestamp);
+        //             /* eslint-disable */
+        //             const dateStr =
+        //                 ('00' + date.getHours()).slice(-2) +
+        //                 ':' +
+        //                 ('00' + date.getMinutes()).slice(-2) +
+        //                 ':' +
+        //                 ('00' + date.getSeconds()).slice(-2);
+        //             return dateStr;
+        //         });
+        //         this.updateChart();
+        //         this.loading = false;
+        //     })
+        //     .catch((error: any) => {
+        //         console.log(error);
+        //     });
     },
 
     methods: {

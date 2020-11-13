@@ -62,6 +62,12 @@ export default Vue.extend({
         }, 1000);
     },
 
+    sockets: {
+        test(data: any) {
+            console.log(data);
+        },
+    },
+
     data() {
         return {
             isActive: false,

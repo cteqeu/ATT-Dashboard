@@ -12,8 +12,13 @@ import vuetify from './plugins/vuetify';
 
 Vue.prototype.$http = axios;
 
+/* eslint-disable */
+Vue.prototype.$API_URL =
+    process.env.NODE_ENV === 'development'
+        ? 'ws://localhost:3000'
+        : `${window.location.protocol}//${document.domain}:${window.location.port}`;
+
 // Vue.prototype.$API_URL = 'ws://att-dashboard.herokuapp.com/';
-Vue.prototype.$API_URL = 'ws://localhost:3000';
 Vue.config.productionTip = false;
 
 Vue.component('apexchart', VueApexCharts);
@@ -34,13 +39,6 @@ Vue.use(
         debug: false,
         connection: SocketIO(Vue.prototype.$API_URL, {
             transports: ['websocket'],
-            transportOptions: {
-                polling: {
-                    extraHeaders: {
-                        Authorization: 'cQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s',
-                    },
-                },
-            },
         }),
     }),
 );

@@ -1,19 +1,22 @@
-import eventlet
+import os
 import json
+import eventlet
+import pandas
+import zipfile
+import urllib.parse as urlparse
+
 from flask import Flask, render_template, jsonify, send_from_directory
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
 from flask_bootstrap import Bootstrap
 from flask_cors import CORS, cross_origin
+
 from configuration import Config
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+
 import psycopg2
-from DbTableConfig import create_tables, create_database
-import os
-import urllib.parse as urlparse
 from psycopg2.extras import RealDictCursor
-import pandas
-import zipfile
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from DbTableConfig import create_tables, create_database
 
 eventlet.monkey_patch()
 
@@ -82,7 +85,7 @@ if DEBUG:
 cur = con.cursor(cursor_factory=RealDictCursor)
 con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 create_tables(cur=cur, DEBUG=DEBUG)
-
+k = 10
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
@@ -94,7 +97,7 @@ def zipdir(path, ziph):
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
     mqtt.subscribe(ATT_SUB_TOPIC)
-
+    
 
 @socketio.on('unsubscribe_all')
 def handle_unsubscribe_all():
@@ -108,6 +111,11 @@ def index():
 
 @app.route('/<path:path>')
 def catch_all(path):
+    global k
+    while not k == 0:
+        print("Emitting data")
+        socketio.emit('test', data="test")
+        k = k-1
     return render_template("index.html")
 
 
