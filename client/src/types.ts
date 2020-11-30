@@ -49,6 +49,17 @@ interface Airquality {
     value: number;
 }
 
+interface Particle {
+    pm1: number;
+    pm10: number;
+    pm25: number;
+}
+
+interface Particles {
+    timestamp: string;
+    values: Particle;
+}
+
 class Coordinate {
     alt: number;
 
@@ -77,4 +88,5 @@ export {
     Light,
     Humidity,
     Airquality,
+    Particles,
 };

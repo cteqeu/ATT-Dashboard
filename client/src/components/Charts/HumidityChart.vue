@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
+import axios from 'axios';
 import { Humidity } from '../../types';
 
 export default Vue.extend({
@@ -79,31 +80,28 @@ export default Vue.extend({
     },
 
     created() {
-        this.loading = true;
-        this.$http
-            .get('http://localhost:3000/api/humidity/10')
-            .then((response) => {
-                console.log(response.data);
-                this.humidityData = response.data.map((el) => el.value.toFixed(2));
-                this.timestamps = response.data.map((el) => {
-                    const date = new Date(el.timestamp);
-                    /* eslint-disable */
-                    const dateStr =
-                        ('00' + date.getHours()).slice(-2) +
-                        ':' +
-                        ('00' + date.getMinutes()).slice(-2) +
-                        ':' +
-                        ('00' + date.getSeconds()).slice(-2);
-
-                    console.log(dateStr);
-                    return dateStr;
-                });
-                this.updateChart();
-                this.loading = false;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        // this.loading = true;
+        // axios
+        //     .get('http://localhost:3000/api/humidity/10')
+        //     .then((response: any) => {
+        //         this.humidityData = response.data.map((el: any) => el.value.toFixed(2));
+        //         this.timestamps = response.data.map((el: any) => {
+        //             const date = new Date(el.timestamp);
+        //             /* eslint-disable */
+        //             const dateStr =
+        //                 ('00' + date.getHours()).slice(-2) +
+        //                 ':' +
+        //                 ('00' + date.getMinutes()).slice(-2) +
+        //                 ':' +
+        //                 ('00' + date.getSeconds()).slice(-2);
+        //             return dateStr;
+        //         });
+        //         this.updateChart();
+        //         this.loading = false;
+        //     })
+        //     .catch((error: any) => {
+        //         console.log(error);
+        //     });
     },
 
     methods: {

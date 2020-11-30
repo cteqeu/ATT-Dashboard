@@ -18,7 +18,7 @@ export default Vue.extend({
         };
     },
     mounted() {
-        this.markers.push(new Coordinate(20, 50, 5, 10));
+        // this.markers.push(new Coordinate(20, 50, 5, 10));
     },
     methods: {
         log(values: any) {

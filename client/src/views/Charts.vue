@@ -25,6 +25,7 @@
             <LightChart v-else-if="item.type === 'light' && isActive" />
             <LoudnessChart v-else-if="item.type === 'loudness' && isActive" />
             <MotionChart v-else-if="item.type === 'motion' && isActive" />
+            <ParticlesChart v-else-if="item.type === 'particles' && isActive" />
         </grid-item>
     </grid-layout>
 </template>
@@ -39,6 +40,7 @@ import HumidityChart from '../components/Charts/HumidityChart.vue';
 import LightChart from '../components/Charts/LightChart.vue';
 import LoudnessChart from '../components/Charts/LoudnessChart.vue';
 import MotionChart from '../components/Charts/MotionChart.vue';
+import ParticlesChart from '../components/Charts/ParticlesChart.vue';
 
 export default Vue.extend({
     components: {
@@ -51,12 +53,19 @@ export default Vue.extend({
         LightChart,
         LoudnessChart,
         MotionChart,
+        ParticlesChart,
     },
 
     mounted() {
         setTimeout(() => {
             this.isActive = true;
         }, 1000);
+    },
+
+    sockets: {
+        test(data: any) {
+            console.log(data);
+        },
     },
 
     data() {
@@ -125,6 +134,15 @@ export default Vue.extend({
                     w: 6,
                     h: 7,
                     i: '6',
+                    static: false,
+                },
+                {
+                    type: 'particles',
+                    x: 0,
+                    y: 19,
+                    w: 12,
+                    h: 9,
+                    i: '7',
                     static: false,
                 },
             ],

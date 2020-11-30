@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
+import axios from 'axios';
 import { Temperature } from '../../types';
 
 export default Vue.extend({
@@ -73,12 +74,11 @@ export default Vue.extend({
     },
     created() {
         this.loading = true;
-        this.$http
+        axios
             .get('http://localhost:3000/api/temperature/10')
-            .then((response) => {
-                console.log(response.data);
-                this.temperatureData = response.data.map((el) => el.value.toFixed(2));
-                this.timestamps = response.data.map((el) => {
+            .then((response: any) => {
+                this.temperatureData = response.data.map((el: any) => el.value.toFixed(2));
+                this.timestamps = response.data.map((el: any) => {
                     const date = new Date(el.timestamp);
                     /* eslint-disable */
                     const dateStr =
@@ -87,14 +87,12 @@ export default Vue.extend({
                         ('00' + date.getMinutes()).slice(-2) +
                         ':' +
                         ('00' + date.getSeconds()).slice(-2);
-
-                    console.log(dateStr);
                     return dateStr;
                 });
                 this.updateChart();
                 this.loading = false;
             })
-            .catch((error) => {
+            .catch((error: any) => {
                 console.log(error);
             });
     },
