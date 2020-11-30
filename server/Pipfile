@@ -16,6 +16,7 @@ psycopg2-binary = "*"
 paho-mqtt = "*"
 gunicorn = "*"
 pandas = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.8"
