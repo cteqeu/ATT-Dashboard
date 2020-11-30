@@ -67,13 +67,19 @@ class Coordinate {
 
     long: number;
 
-    airquality?: number;
+    pm1: number;
 
-    constructor(alt: number, lat: number, long: number, airquality: number) {
+    pm10: number;
+
+    pm25: number;
+
+    constructor(alt: number, lat: number, long: number, pm1: number, pm10: number, pm25: number) {
         this.alt = alt;
         this.lat = lat;
         this.long = long;
-        this.airquality = airquality;
+        this.pm1 = pm1;
+        this.pm10 = pm10;
+        this.pm25 = pm25;
     }
 }
 

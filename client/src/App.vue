@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Component, Vue } from 'vue-property-decorator';
 import { NavItems } from './types';
 import NavigationDrawer from './components/NavigationDrawer.vue';
@@ -37,7 +38,8 @@ export default class App extends Vue {
         { title: 'ATT - Orange', icon: 'mdi-web', link: '/att' },
     ];
 
-    public downloadCSV = () => window.open('http://localhost:3000/api/download', '_blank');
+    // @ts-ignore
+    public downloadCSV = () => window.open(`${this.$REST_URL}/api/download`, '_blank');
 }
 </script>
 

@@ -12,11 +12,16 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
-import axios from 'axios';
 import { Humidity } from '../../types';
 
 export default Vue.extend({
+    props: {
+        initialData: {
+            type: Array,
+        },
+    },
     data() {
         return {
             loading: false,
@@ -24,6 +29,7 @@ export default Vue.extend({
             timestamps: [],
             series: [
                 {
+                    name: 'Humidity',
                     data: [],
                 },
             ],
@@ -33,12 +39,13 @@ export default Vue.extend({
                     stacked: false,
                     height: 350,
                     zoom: {
-                        type: 'x',
-                        enabled: true,
-                        autoScaleYaxis: true,
+                        enabled: false,
                     },
                 },
                 dataLabels: {
+                    enabled: false,
+                },
+                zoom: {
                     enabled: false,
                 },
                 markers: {
@@ -79,39 +86,27 @@ export default Vue.extend({
         };
     },
 
-    created() {
-        // this.loading = true;
-        // axios
-        //     .get('http://localhost:3000/api/humidity/10')
-        //     .then((response: any) => {
-        //         this.humidityData = response.data.map((el: any) => el.value.toFixed(2));
-        //         this.timestamps = response.data.map((el: any) => {
-        //             const date = new Date(el.timestamp);
-        //             /* eslint-disable */
-        //             const dateStr =
-        //                 ('00' + date.getHours()).slice(-2) +
-        //                 ':' +
-        //                 ('00' + date.getMinutes()).slice(-2) +
-        //                 ':' +
-        //                 ('00' + date.getSeconds()).slice(-2);
-        //             return dateStr;
-        //         });
-        //         this.updateChart();
-        //         this.loading = false;
-        //     })
-        //     .catch((error: any) => {
-        //         console.log(error);
-        //     });
+    mounted() {
+        this.initialData.forEach((element: any) => {
+            // @ts-ignore
+            this.humidityData.push(element.value);
+            const [t, _] = new Date(element.timestamp).toTimeString().split(' ');
+            // @ts-ignore
+            this.timestamps.push(t);
+        });
+        this.updateChart();
     },
 
     methods: {
         updateChart() {
+            // @ts-ignore
             this.$refs.humidityChart.updateSeries([
                 {
                     data: this.$data.humidityData,
                 },
             ]);
 
+            // @ts-ignore
             this.$refs.humidityChart.updateOptions({
                 xaxis: {
                     categories: this.$data.timestamps,

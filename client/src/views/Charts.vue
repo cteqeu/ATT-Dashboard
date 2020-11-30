@@ -8,7 +8,14 @@
         :use-css-transforms="true"
         :vertical-compact="true"
     >
+        <v-overlay v-if="loading" app>
+            <div class="text-center">
+                <h2>Loading charts ...</h2>
+            </div>
+        </v-overlay>
+
         <grid-item
+            v-else
             v-for="(item, i) in layout"
             :key="i"
             :h="item.h"
@@ -18,21 +25,47 @@
             :x="item.x"
             :y="item.y"
         >
-            <TempChart v-if="item.type === 'temperature' && isActive" />
-            <PressureChart v-else-if="item.type === 'pressure' && isActive" />
-            <AirqualityChart v-else-if="item.type === 'airquality' && isActive" />
-            <HumidityChart v-else-if="item.type === 'humidity' && isActive" />
-            <LightChart v-else-if="item.type === 'light' && isActive" />
-            <LoudnessChart v-else-if="item.type === 'loudness' && isActive" />
-            <MotionChart v-else-if="item.type === 'motion' && isActive" />
-            <ParticlesChart v-else-if="item.type === 'particles' && isActive" />
+            <TempChart
+                v-if="item.type === 'temperature' && !loading"
+                :initialData="initialTempData"
+            />
+            <PressureChart
+                v-else-if="item.type === 'pressure' && !loading"
+                :initialData="initialPressureData"
+            />
+            <AirqualityChart
+                v-else-if="item.type === 'airquality' && !loading"
+                :initialData="initialairqualityData"
+            />
+            <HumidityChart
+                v-else-if="item.type === 'humidity' && !loading"
+                :initialData="initialHumidityData"
+            />
+            <LightChart
+                v-else-if="item.type === 'light' && !loading"
+                :initialData="initialLightData"
+            />
+            <LoudnessChart
+                v-else-if="item.type === 'loudness' && !loading"
+                :initialData="initialLoudnessData"
+            />
+            <MotionChart
+                v-else-if="item.type === 'motion' && !loading"
+                :initialData="initialMotionData"
+            />
+            <ParticlesChart
+                v-else-if="item.type === 'particles' && !loading"
+                :initialData="initialParticlesData"
+            />
         </grid-item>
     </grid-layout>
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
 import { GridItem, GridLayout } from 'vue-grid-layout';
+import axios from 'axios';
 import TempChart from '../components/Charts/TempChart.vue';
 import PressureChart from '../components/Charts/PressureChart.vue';
 import AirqualityChart from '../components/Charts/AirqualityChart.vue';
@@ -56,21 +89,54 @@ export default Vue.extend({
         ParticlesChart,
     },
 
-    mounted() {
-        setTimeout(() => {
-            this.isActive = true;
-        }, 1000);
-    },
+    async mounted() {
+        this.loading = true;
 
-    sockets: {
-        test(data: any) {
-            console.log(data);
-        },
+        try {
+            // @ts-ignore
+            const airqualityData = await axios.get(`${this.$REST_URL}/api/airquality/1`);
+            // @ts-ignore
+            const humidityData = await axios.get(`${this.$REST_URL}/api/humidity/10`);
+            // @ts-ignore
+            const lightData = await axios.get(`${this.$REST_URL}/api/light/10`);
+            // @ts-ignore
+            const loudnessData = await axios.get(`${this.$REST_URL}/api/loudness/1`);
+            // @ts-ignore
+            const motionData = await axios.get(`${this.$REST_URL}/api/motion/10`);
+            // @ts-ignore
+            const particlesData = await axios.get(`${this.$REST_URL}/api/particles/10`);
+            // @ts-ignore
+            const pressureData = await axios.get(`${this.$REST_URL}/api/pressure/10`);
+            // @ts-ignore
+            const tempData = await axios.get(`${this.$REST_URL}/api/temperature/10`);
+
+            this.initialairqualityData = airqualityData.data;
+            this.initialHumidityData = humidityData.data;
+            this.initialLightData = lightData.data;
+            this.initialLoudnessData = loudnessData.data;
+            this.initialMotionData = motionData.data;
+            this.initialPressureData = pressureData.data;
+            this.initialParticlesData = particlesData.data;
+            this.initialTempData = tempData.data;
+        } catch (error) {
+            console.error(error.message);
+        }
+
+        this.loading = false;
     },
 
     data() {
         return {
-            isActive: false,
+            initialTempData: [],
+            initialPressureData: [],
+            initialairqualityData: [],
+            initialHumidityData: [],
+            initialLightData: [],
+            initialLoudnessData: [],
+            initialMotionData: [],
+            initialParticlesData: [],
+
+            loading: false,
             index: 0,
             layout: [
                 {

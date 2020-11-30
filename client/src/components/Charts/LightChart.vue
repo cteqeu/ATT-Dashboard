@@ -12,10 +12,16 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
 import { Light } from '../../types';
 
 export default Vue.extend({
+    props: {
+        initialData: {
+            type: Array,
+        },
+    },
     data() {
         return {
             loading: false,
@@ -23,6 +29,7 @@ export default Vue.extend({
             timestamps: [],
             series: [
                 {
+                    name: 'Light',
                     data: [],
                 },
             ],
@@ -32,9 +39,7 @@ export default Vue.extend({
                     stacked: false,
                     height: 350,
                     zoom: {
-                        type: 'x',
-                        enabled: true,
-                        autoScaleYaxis: true,
+                        enabled: false,
                     },
                 },
                 dataLabels: {
@@ -78,14 +83,27 @@ export default Vue.extend({
         };
     },
 
+    mounted() {
+        this.initialData.forEach((element: any) => {
+            // @ts-ignore
+            this.lightData.push(element.value);
+            const [t, _] = new Date(element.timestamp).toTimeString().split(' ');
+            // @ts-ignore
+            this.timestamps.push(t);
+        });
+        this.updateChart();
+    },
+
     methods: {
         updateChart() {
+            // @ts-ignore
             this.$refs.lightChart.updateSeries([
                 {
                     data: this.$data.lightData,
                 },
             ]);
 
+            // @ts-ignore
             this.$refs.lightChart.updateOptions({
                 xaxis: {
                     categories: this.$data.timestamps,

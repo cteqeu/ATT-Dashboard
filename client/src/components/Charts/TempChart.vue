@@ -12,11 +12,16 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
-import axios from 'axios';
 import { Temperature } from '../../types';
 
 export default Vue.extend({
+    props: {
+        initialData: {
+            type: Array,
+        },
+    },
     data() {
         return {
             loading: false,
@@ -24,6 +29,7 @@ export default Vue.extend({
             timestamps: [],
             series: [
                 {
+                    name: 'Temperature',
                     data: [],
                 },
             ],
@@ -72,37 +78,29 @@ export default Vue.extend({
             selection: 'one_year',
         };
     },
-    created() {
-        this.loading = true;
-        axios
-            .get('http://localhost:3000/api/temperature/10')
-            .then((response: any) => {
-                this.temperatureData = response.data.map((el: any) => el.value.toFixed(2));
-                this.timestamps = response.data.map((el: any) => {
-                    const date = new Date(el.timestamp);
-                    /* eslint-disable */
-                    const dateStr =
-                        ('00' + date.getHours()).slice(-2) +
-                        ':' +
-                        ('00' + date.getMinutes()).slice(-2) +
-                        ':' +
-                        ('00' + date.getSeconds()).slice(-2);
-                    return dateStr;
-                });
-                this.updateChart();
-                this.loading = false;
-            })
-            .catch((error: any) => {
-                console.log(error);
-            });
+
+    mounted() {
+        this.initialData.forEach((element: any) => {
+            // @ts-ignore
+            this.temperatureData.push(element.value);
+
+            const [t, _] = new Date(element.timestamp).toTimeString().split(' ');
+            // eslint
+            // @ts-ignore
+            this.timestamps.push(t);
+        });
+        this.updateChart();
     },
+
     methods: {
         updateChart() {
+            // @ts-ignore
             this.$refs.temperatureChart.updateSeries([
                 {
                     data: this.$data.temperatureData,
                 },
             ]);
+            // @ts-ignore
             this.$refs.temperatureChart.updateOptions({
                 xaxis: {
                     categories: this.$data.timestamps,

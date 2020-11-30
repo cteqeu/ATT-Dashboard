@@ -12,10 +12,16 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
 import { Motion } from '../../types';
 
 export default Vue.extend({
+    props: {
+        initialData: {
+            type: Array,
+        },
+    },
     data() {
         return {
             loading: false,
@@ -23,6 +29,7 @@ export default Vue.extend({
             timestamps: [],
             series: [
                 {
+                    name: 'Motion',
                     data: [],
                 },
             ],
@@ -63,9 +70,6 @@ export default Vue.extend({
                     markers: {
                         size: 0,
                     },
-                    legend: {
-                        show: false,
-                    },
                 },
             },
             selection: 'one_year',
@@ -73,11 +77,13 @@ export default Vue.extend({
     },
     methods: {
         updateChart() {
+            // @ts-ignore
             this.$refs.motionChart.updateSeries([
                 {
                     data: this.$data.motionData,
                 },
             ]);
+            // @ts-ignore
             this.$refs.motionChart.updateOptions({
                 xaxis: {
                     categories: this.$data.timestamps,
@@ -91,6 +97,18 @@ export default Vue.extend({
             this.updateChart();
         },
     },
+
+    mounted() {
+        this.initialData.forEach((element: any) => {
+            // @ts-ignore
+            this.motionData.push(element.value);
+            const [t, _] = new Date(element.timestamp).toTimeString().split(' ');
+            // @ts-ignore
+            this.timestamps.push(t);
+        });
+        this.updateChart();
+    },
+
     sockets: {
         motion(data: string) {
             const message: Motion = JSON.parse(data);

@@ -10,13 +10,16 @@ import 'leaflet/dist/leaflet.css';
 import router from './router';
 import vuetify from './plugins/vuetify';
 
-Vue.prototype.$http = axios;
-
 /* eslint-disable */
 Vue.prototype.$API_URL =
     process.env.NODE_ENV === 'development'
         ? 'ws://localhost:3000'
         : `${window.location.protocol}//${document.domain}:${window.location.port}`;
+
+Vue.prototype.$REST_URL =
+    process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000'
+        : `https://${document.domain}:${window.location.port}`;
 
 // Vue.prototype.$API_URL = 'ws://att-dashboard.herokuapp.com/';
 Vue.config.productionTip = false;

@@ -12,11 +12,16 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
 import { Particles } from '../../types';
 
-/* eslint-disable */
 export default Vue.extend({
+    props: {
+        initialData: {
+            type: Array,
+        },
+    },
     data() {
         return {
             loading: false,
@@ -76,7 +81,6 @@ export default Vue.extend({
                 },
                 yaxis: {
                     min: 0,
-                    max: 20,
                 },
                 grid: {
                     borderColor: '#f1f1f1',
@@ -87,6 +91,7 @@ export default Vue.extend({
 
     methods: {
         updateChart() {
+            // @ts-ignore
             this.$refs.particlesChart.updateSeries([
                 {
                     data: this.$data.pm1,
@@ -98,7 +103,7 @@ export default Vue.extend({
                     data: this.$data.pm25,
                 },
             ]);
-
+            // @ts-ignore
             this.$refs.particlesChart.updateOptions({
                 xaxis: {
                     categories: this.$data.timestamps,
@@ -106,8 +111,25 @@ export default Vue.extend({
             });
         },
     },
+    mounted() {
+        this.initialData.forEach((element) => {
+            // @ts-ignore
+            const [t, _] = new Date(element.timestamp).toTimeString().split(' ');
+            // @ts-ignore
+            this.pm1.push(element.pm1);
+
+            // @ts-ignore
+            this.pm10.push(element.pm10);
+            // @ts-ignore
+            this.pm25.push(element.pm25);
+
+            // @ts-ignore
+            this.timestamps.push(t);
+        });
+
+        this.updateChart();
+    },
     watch: {
-        /* eslint-disable */
         timestamps: function() {
             this.updateChart();
         },

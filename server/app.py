@@ -92,37 +92,27 @@ def zipdir(path, ziph):
         for file in files:
             ziph.write(os.path.join(root, file))
 
-
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
     mqtt.subscribe(ATT_SUB_TOPIC)
-    
-    
-@mqtt.on_log()
-def handle_logging(client, userdata, level, buf):
-    print('Error: {}'.format(buf))
 
 @socketio.on('unsubscribe_all')
 def handle_unsubscribe_all():
     mqtt.unsubscribe_all()
 
-
 @app.route('/', methods=['GET'])
 def index():
     return render_template("index.html")
 
-
 @app.route('/<path:path>')
 def catch_all(path):
     return render_template("index.html")
-
 
 def createCSVFile(sensor):
     fn = "export/" + sensor + '.csv'
     cur.execute("SELECT * FROM " + sensor)
     records = cur.fetchall()
     pandas.DataFrame(records).to_csv(fn, index=False)
-
 
 @app.route('/api/download', methods=['GET'])
 def export_csv():
@@ -142,48 +132,40 @@ def export_csv():
     zipf.close()
     return send_from_directory('archives', 'export.zip', attachment_filename='export.zip', as_attachment=True)
 
-
 @app.route('/api/humidity', methods=['GET'])
 def humidity():
     cur.execute("SELECT * FROM humidity")
     return jsonify(cur.fetchall())
-
 
 @app.route('/api/pressure', methods=['GET'])
 def pressure():
     cur.execute("SELECT * FROM pressure")
     return jsonify(cur.fetchall())
 
-
 @app.route('/api/temperature', methods=['GET'])
 def temperature():
     cur.execute("SELECT * FROM temperature")
     return jsonify(cur.fetchall())
-
 
 @app.route('/api/airquality', methods=['GET'])
 def airquality():
     cur.execute("SELECT * FROM airquality")
     return jsonify(cur.fetchall())
 
-
 @app.route('/api/gps', methods=['GET'])
 def gps():
     cur.execute("SELECT * FROM gps")
     return jsonify(cur.fetchall())
-
 
 @app.route('/api/light', methods=['GET'])
 def light():
     cur.execute("SELECT * FROM light")
     return jsonify(cur.fetchall())
 
-
 @app.route('/api/loudness', methods=['GET'])
 def loudness():
     cur.execute("SELECT * FROM loudness")
     return jsonify(cur.fetchall())
-
 
 @app.route('/api/motion', methods=['GET'])
 def motion():
@@ -201,13 +183,11 @@ def humidityAm(amount):
         "SELECT * FROM humidity ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
-
 @app.route('/api/pressure/<amount>', methods=['GET'])
 def pressureAm(amount):
     cur.execute(
         "SELECT * FROM pressure ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
-
 
 @app.route('/api/temperature/<amount>', methods=['GET'])
 def temperatureAm(amount):
@@ -215,13 +195,11 @@ def temperatureAm(amount):
         "SELECT * FROM temperature ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
-
 @app.route('/api/airquality/<amount>', methods=['GET'])
 def airqualityAm(amount):
     cur.execute(
         "SELECT * FROM airquality ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
-
 
 @app.route('/api/gps/<amount>', methods=['GET'])
 def gpsAm(amount):
@@ -229,20 +207,17 @@ def gpsAm(amount):
         "SELECT * FROM gps ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
-
 @app.route('/api/light/<amount>', methods=['GET'])
 def lightAm(amount):
     cur.execute(
         "SELECT * FROM light ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
-
 @app.route('/api/loudness/<amount>', methods=['GET'])
 def loudnessAm(amount):
     cur.execute(
         "SELECT * FROM loudness ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
-
 
 @app.route('/api/motion/<amount>', methods=['GET'])
 def motionAm(amount):
@@ -255,8 +230,6 @@ def particlesAm(amount):
     cur.execute(
         "SELECT * FROM particles ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
-
-
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
@@ -315,8 +288,8 @@ def handle_mqtt_message(client, userdata, message):
         payload_lat = payload_str[8][1:-1]
         payload_long = payload_str[10][1:-2]
         payload_alt = payload_str[12][1:-2]
-        cur.execute("INSERT INTO gps (TIMESTAMP,LAT,LONG,ALT) VALUES (%s, %s, %s, %s)",
-                    (payload_time, payload_lat, payload_long, payload_alt))
+        cur.execute("INSERT INTO gps (TIMESTAMP,LAT,LONG,ALT,PM1,PM10,PM25) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                    (payload_time, payload_lat, payload_long, payload_alt, particleData["values"]["pm1"], particleData["values"]["pm10"], particleData["values"]["pm25"], particleData["timestamp"]))
         con.commit()
         if DEBUG:
             print("GPS:" + message.payload.decode())
@@ -327,7 +300,7 @@ def handle_mqtt_message(client, userdata, message):
         payload_val = payload_str[6][1:-1]
         payload_time = payload_str[3]
         cur.execute("INSERT INTO light (VALUE,TIMESTAMP) VALUES (%s, %s)",
-                    (payload_val, payload_time))
+            (payload_val, payload_time))
         con.commit()
         if DEBUG:
             print("Light:" + message.payload.decode())
@@ -372,7 +345,6 @@ def handle_mqtt_message(client, userdata, message):
             particleData["values"]["pm1"] = int(float(payload_str[6][1:-1]))
         if COUNTER == 2:
             particleData["values"]["pm25"] = int(float(payload_str[6][1:-1]))
-
 
 if __name__ == '__main__':
     # important: Do not use reloader because this will create two Flask instances.

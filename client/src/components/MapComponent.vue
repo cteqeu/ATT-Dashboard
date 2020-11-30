@@ -8,7 +8,9 @@
                         <li>Altitude : {{ marker.alt.toFixed(2) }}</li>
                         <li>Latitude : {{ marker.lat.toFixed(2) }}</li>
                         <li>Longtude : {{ marker.long.toFixed(2) }}</li>
-                        <li>Air Quality : {{ marker.airquality.toFixed(2) }}</li>
+                        <li>PPM1: {{ marker.pm1.toFixed(2) }}</li>
+                        <li>PPM10 : {{ marker.pm10.toFixed(2) }}</li>
+                        <li>PPM25 : {{ marker.pm25.toFixed(2) }}</li>
                     </ul>
                 </l-popup>
             </l-marker>
@@ -18,6 +20,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Prop, Vue, Component } from 'vue-property-decorator';
 import { PropType } from 'vue';
 import { latLng } from 'leaflet';

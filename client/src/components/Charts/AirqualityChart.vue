@@ -12,10 +12,16 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
 import { Airquality } from '../../types';
 
 export default Vue.extend({
+    props: {
+        initialData: {
+            type: Array,
+        },
+    },
     computed: {
         chartSize: () => {
             const width = window.innerWidth;
@@ -39,6 +45,9 @@ export default Vue.extend({
             chartOptions: {
                 chart: {
                     type: 'radialBar',
+                    zoom: {
+                        enabled: false,
+                    },
                 },
                 tooltip: {
                     shared: false,
@@ -66,6 +75,12 @@ export default Vue.extend({
                 labels: ['Max 24h', 'Current', 'Min 24h'],
             },
         };
+    },
+
+    mounted() {
+        this.initialData.forEach((element: any) => {
+            this.$data.series.splice(1, 1, (element.value / 1.5).toFixed(2));
+        });
     },
 
     sockets: {

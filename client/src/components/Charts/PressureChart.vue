@@ -6,10 +6,16 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
 import { Pressure } from '../../types';
 
 export default Vue.extend({
+    props: {
+        initialData: {
+            type: Array,
+        },
+    },
     data() {
         return {
             loading: false,
@@ -25,6 +31,9 @@ export default Vue.extend({
                 chart: {
                     type: 'bar',
                     height: 350,
+                    zoom: {
+                        enabled: false,
+                    },
                 },
                 plotOptions: {
                     bar: {
@@ -81,12 +90,14 @@ export default Vue.extend({
 
     methods: {
         updateChart() {
+            // @ts-ignore
             this.$refs.pressureChart.updateSeries([
                 {
                     data: this.$data.pressureData,
                 },
             ]);
 
+            // @ts-ignore
             this.$refs.pressureChart.updateOptions({
                 xaxis: {
                     categories: this.$data.timestamps,
@@ -100,6 +111,17 @@ export default Vue.extend({
             this.updateChart();
         },
     },
+    mounted() {
+        this.initialData.forEach((element: any) => {
+            // @ts-ignore
+            this.pressureData.push(((element.value - 1013.25) / 1013.25) * 100);
+            const [t, _] = new Date(element.timestamp).toTimeString().split(' ');
+            // @ts-ignore
+            this.timestamps.push(t);
+        });
+        this.updateChart();
+    },
+
     sockets: {
         pressure(data: string) {
             const message: Pressure = JSON.parse(data);

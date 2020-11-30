@@ -90,7 +90,10 @@ def create_tables(cur, DEBUG):
                 TIMESTAMP       TIMESTAMP       NOT NULL,
                 LAT             FLOAT           NOT NULL,
                 LONG            FLOAT           NOT NULL,
-                ALT             FLOAT           NOT NULL
+                ALT             FLOAT           NOT NULL,
+                PM1            INTEGER          NOT NULL,
+                PM10           INTEGER          NOT NULL,
+                PM25           INTEGER          NOT NULL
             ); ''')
     else:
         if DEBUG:

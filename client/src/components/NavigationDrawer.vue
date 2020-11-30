@@ -1,7 +1,10 @@
 <template>
     <v-navigation-drawer app overflow permanent>
         <v-list-item class="px-2">
-          <v-img height="85px" src="https://www.thethingsnetwork.org/conference/wp-content/uploads/2018/12/AllThingsTalk-1.png" />
+            <v-img
+                height="85px"
+                src="https://www.thethingsnetwork.org/conference/wp-content/uploads/2018/12/AllThingsTalk-1.png"
+            />
         </v-list-item>
 
         <v-divider />
@@ -27,6 +30,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { PropType } from 'vue';
 import { NavItems } from '../types';

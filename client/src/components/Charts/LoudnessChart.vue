@@ -12,10 +12,16 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
 import { Loudness } from '../../types';
 
 export default Vue.extend({
+    props: {
+        initialData: {
+            type: Array,
+        },
+    },
     computed: {
         chartSize: () => {
             const width = window.innerWidth;
@@ -70,17 +76,21 @@ export default Vue.extend({
         };
     },
 
+    mounted() {
+        this.initialData.forEach((element: any) => {
+            // @ts-ignore
+            this.series.push(element.value);
+        });
+    },
+
     sockets: {
         loudness(data: string) {
             const message: Loudness = JSON.parse(data);
             const value = Number(message.value.toFixed(2));
             this.$data.series.splice(1, 1, (value / 1.5).toFixed(2));
-            console.log(value);
             if (value / 1.5 <= this.$data.series[2]) {
                 this.$data.series.splice(2, 1, (value / 1.5).toFixed(2));
             } else if (value / 1.5 >= this.$data.series[0]) {
-                console.log(value / 1.5);
-                console.log(this.$data.series[0] / 1.5);
                 this.$data.series.splice(0, 1, (value / 1.5).toFixed(2));
             }
         },

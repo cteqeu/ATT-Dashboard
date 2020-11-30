@@ -3,7 +3,9 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Vue } from 'vue-property-decorator';
+import axios from 'axios';
 import MapComponent from '@/components/MapComponent.vue';
 import { Coordinate, Airquality } from '../types';
 
@@ -14,11 +16,20 @@ export default Vue.extend({
     data() {
         return {
             markers: [] as Coordinate[],
-            airqualityData: Number,
         };
     },
-    mounted() {
-        // this.markers.push(new Coordinate(20, 50, 5, 10));
+    created() {
+        // @ts-ignore
+        const URL = `${this.$REST_URL}/api/gps`;
+
+        axios
+            .get(`${URL}/api/gps`)
+            .then((response: any) => {
+                this.markers = response.data;
+            })
+            .catch((error: any) => {
+                console.error(error.message);
+            });
     },
     methods: {
         log(values: any) {
@@ -27,17 +38,14 @@ export default Vue.extend({
                     values.altitude,
                     values.latitude,
                     values.longitude,
-                    this.$data.airquality,
+                    values.pm1,
+                    values.pm10,
+                    values.pm25,
                 ),
             );
         },
     },
     sockets: {
-        airquality(data: string) {
-            const message: Airquality = JSON.parse(data);
-            const value = Number(message.value.toFixed(2));
-            this.$data.airquality = value;
-        },
         gps(data: string) {
             const message = JSON.parse(data);
             // eslint-disable-next-line
