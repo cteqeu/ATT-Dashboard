@@ -146,7 +146,7 @@ def export_csv():
     
     time.sleep(2)
     
-    return send_from_directory('archives', file, cache_timeout='1s', attachment_filename=file, as_attachment=True)
+    return send_from_directory('archives', file, cache_timeout=0, attachment_filename=file, as_attachment=True)
    
 
 @app.route('/api/humidity', methods=['GET'])
