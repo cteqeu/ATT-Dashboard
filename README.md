@@ -12,19 +12,11 @@
   <a href="https://github.com/JensVanhulst/IOT-Dashboard/issues">
     <img alt="GitHub issues" src="https://img.shields.io/github/issues/SheldonPi1999/ATT-Dashboard?style=for-the-badge">
   </a>
-
-  <a href="https://github.com/JensVanhulst/IOT-Dashboard/graphs/contributors">
-    <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/SheldonPi/ATT-Dashboard?style=for-the-badge" alt="Contributions">
-  </a>
-
-  <a href="#">
-    <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/SheldonPi/ATT-Dashboard?style=for-the-badge" alt="Language">
-  </a>
 </p>
 
 # All Things Talk - Dashboard
 
-This project is an IOT dashboard written in Vue.js and python. It is specificaly written to work with the "All things talk rapid development kit"
+This project is an IOT dashboard written in Vue.js and python. It is designed to work with the "All things talk rapid development kit"
 
 ---
 
@@ -49,7 +41,7 @@ This project is an IOT dashboard written in Vue.js and python. It is specificaly
 
 You need to have the following tools installed on your system
 
-> NOTE : If you install docker-desktop, docker-compose comes preinstalled. If you are on Linux you need to install docker and docker compose seperately
+> NOTE : If you install docker-desktop, docker-compose comes preinstalled. If you are on Linux you need to install docker and docker compose separately
 
 | Software name  | version | version in project |       link       |
 | :------------: | :-----: | :----------------: | :--------------: |
@@ -121,36 +113,25 @@ https://github.com/cteqeu/pxlairquality/blob/master/General/Slides/20200117_NB-I
 
   ```python
   class Config(object):
-      ATT_DEVICE_ID = "ATT-DEVICE-ID-HERE"
-      SECRET = 'SECRET HERE'
-      TEMPLATES_AUTO_RELOAD = True
-      MQTT_BROKER_URL = "api.allthingstalk.io"
-      MQTT_BROKER_PORT = 1883
-      MQTT_USERNAME = "maker:XXXXXXXX-HERE"
-      MQTT_PASSWORD = 'PASSWORD-HERE'
-      MQTT_KEEPALIVE = 5
-      MQTT_TLS_ENABLED = False
-      MQTT_CLEAN_SESSION = True
+    ENV = "production"
+    PORT = 80
+    # ENV = "dev"
+    # PORT = 3000
+    ATT_DEVICE_ID = "token-here"
+    SECRET = 'secret-here'
+    TEMPLATES_AUTO_RELOAD = True
+    MQTT_BROKER_URL = "api.allthingstalk.io"
+    MQTT_BROKER_PORT = 1883
+    MQTT_USERNAME = "maker:XXXXXXXX"
+    MQTT_PASSWORD = 'xxxxxx'
+    MQTT_KEEPALIVE = 5
+    MQTT_TLS_ENABLED = False
+    MQTT_CLEAN_SESSION = True
   ```
 
-- In the client folder, go to `main.ts` and change the Authorization header with your secret
-
-  ```js
-  Vue.use(
-    new VueSocketIO({
-      debug: true,
-      connection: SocketIO("http://localhost:5000", {
-        transportOptions: {
-          polling: {
-            extraHeaders: {
-              Authorization: "FLASK-SECRET-HERE",
-            },
-          },
-        },
-      }),
-    })
-  );
-  ```
+- **_Client_**
+  - You need to copy the environment variables from `.env.sample` into a `.env`
+    and set the values to either `DEVELOPMENT` or `PRODUCTION`
 
 ### Ports
 
@@ -159,7 +140,7 @@ The following ports are used in development
 |  Service   | Port |
 | :--------: | :--: |
 |    MQTT    | 1883 |
-| Flask api  | 5000 |
+| Flask api  | 3000 |
 | Vue client | 8081 |
 | postgresql | 5432 |
 |  pgAdmin   | 8080 |
@@ -228,12 +209,6 @@ Create heroku app
 
 ```sh
 heroku create my-app-name
-```
-
-Edit Procfile
-
-```
-web: gunicorn app:app
 ```
 
 Create Postgresql DB on heroku
