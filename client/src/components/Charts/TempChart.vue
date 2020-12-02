@@ -82,7 +82,7 @@ export default Vue.extend({
     mounted() {
         this.initialData.forEach((element: any) => {
             // @ts-ignore
-            this.temperatureData.push(element.value);
+            this.temperatureData.push(element.value.toFixed(2));
 
             const [t, _] = new Date(element.timestamp).toTimeString().split(' ');
             // eslint

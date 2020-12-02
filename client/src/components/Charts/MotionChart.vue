@@ -1,7 +1,8 @@
 <template>
-    <v-card :loading="loading" align="center" height="100%">
+    <v-card align="center" height="100%">
         <v-card-title class="justify-center pb-0">Motion</v-card-title>
         <apexchart
+            style="overflow: hidden"
             height="280px"
             type="area"
             :options="chartOptions"
@@ -24,7 +25,6 @@ export default Vue.extend({
     },
     data() {
         return {
-            loading: false,
             motionData: [],
             timestamps: [],
             series: [

@@ -23,9 +23,11 @@ export default Vue.extend({
         const URL = `${this.$REST_URL}/api/gps`;
 
         axios
-            .get(`${URL}/api/gps`)
+            .get(URL)
             .then((response: any) => {
-                this.markers = response.data;
+                console.log(response.data);
+
+                // this.markers = response.data;
             })
             .catch((error: any) => {
                 console.error(error.message);
@@ -33,7 +35,7 @@ export default Vue.extend({
     },
     methods: {
         log(values: any) {
-            this.$data.markers.push(
+            this.markers.push(
                 new Coordinate(
                     values.altitude,
                     values.latitude,
@@ -47,7 +49,10 @@ export default Vue.extend({
     },
     sockets: {
         gps(data: string) {
-            const message = JSON.parse(data);
+            const jsonString = data.substring(1, data.length - 1);
+
+            const message = JSON.parse(jsonString);
+            console.log(message);
             // eslint-disable-next-line
             // @ts-ignore
             this.log(message.value);

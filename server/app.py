@@ -109,6 +109,9 @@ def catch_all(path):
     return render_template("index.html")
 
 def createCSVFile(sensor):
+    files = glob.glob('server/export')
+    for f in files:
+        os.remove(f)
     fn = "export/" + sensor + '.csv'
     cur.execute("SELECT * FROM " + sensor)
     records = cur.fetchall()
@@ -180,55 +183,55 @@ def particles():
 @app.route('/api/humidity/<amount>', methods=['GET'])
 def humidityAm(amount):
     cur.execute(
-        "SELECT * FROM humidity ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+        "SELECT * FROM humidity ORDER BY TIMESTAMP ASC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
 @app.route('/api/pressure/<amount>', methods=['GET'])
 def pressureAm(amount):
     cur.execute(
-        "SELECT * FROM pressure ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+        "SELECT * FROM pressure ORDER BY TIMESTAMP ASC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
 @app.route('/api/temperature/<amount>', methods=['GET'])
 def temperatureAm(amount):
     cur.execute(
-        "SELECT * FROM temperature ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+        "SELECT * FROM temperature ORDER BY TIMESTAMP ASC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
 @app.route('/api/airquality/<amount>', methods=['GET'])
 def airqualityAm(amount):
     cur.execute(
-        "SELECT * FROM airquality ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+        "SELECT * FROM airquality ORDER BY TIMESTAMP ASC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
 @app.route('/api/gps/<amount>', methods=['GET'])
 def gpsAm(amount):
     cur.execute(
-        "SELECT * FROM gps ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+        "SELECT * FROM gps ORDER BY TIMESTAMP ASC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
 @app.route('/api/light/<amount>', methods=['GET'])
 def lightAm(amount):
     cur.execute(
-        "SELECT * FROM light ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+        "SELECT * FROM light ORDER BY TIMESTAMP ASC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
 @app.route('/api/loudness/<amount>', methods=['GET'])
 def loudnessAm(amount):
     cur.execute(
-        "SELECT * FROM loudness ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+        "SELECT * FROM loudness ORDER BY TIMESTAMP ASC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
 @app.route('/api/motion/<amount>', methods=['GET'])
 def motionAm(amount):
     cur.execute(
-        "SELECT * FROM motion ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+        "SELECT * FROM motion ORDER BY TIMESTAMP ASC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
 @app.route('/api/particles/<amount>', methods=['GET'])
 def particlesAm(amount):
     cur.execute(
-        "SELECT * FROM particles ORDER BY TIMESTAMP DESC LIMIT " + amount + ";")
+        "SELECT * FROM particles ORDER BY TIMESTAMP ASC LIMIT " + amount + ";")
     return jsonify(cur.fetchall())
 
 @mqtt.on_message()
@@ -282,17 +285,28 @@ def handle_mqtt_message(client, userdata, message):
             print("Airquality:" + message.payload.decode())
 
     elif message.topic == topics.get("gps"):
-        socketio.emit('gps', data=payload)
+        test_string = json.dumps(message.payload.decode())
+        add_string = ',"pm1":' + str(particleData["values"]["pm1"]) + ',"pm10":' + str(particleData["values"]["pm10"]) + ',"pm25":' + str(particleData["values"]["pm25"])
+
+        # initializing N  
+        N = len(test_string) - 3
+        
+        # # using list slicing 
+        # # Add substring at specific index  
+        res = test_string[:N] + add_string + test_string[N:]
+        response = res.replace('\\', '')
+
+        socketio.emit('gps', data=response)
+        if DEBUG:
+            print("GPS:" + message.payload.decode())
         payload_str = payload.split('"')
         payload_time = payload_str[3]
         payload_lat = payload_str[8][1:-1]
         payload_long = payload_str[10][1:-2]
         payload_alt = payload_str[12][1:-2]
         cur.execute("INSERT INTO gps (TIMESTAMP,LAT,LONG,ALT,PM1,PM10,PM25) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                    (payload_time, payload_lat, payload_long, payload_alt, particleData["values"]["pm1"], particleData["values"]["pm10"], particleData["values"]["pm25"], particleData["timestamp"]))
+                    (payload_time, payload_lat, payload_long, payload_alt, particleData["values"]["pm1"], particleData["values"]["pm10"], particleData["values"]["pm25"]))
         con.commit()
-        if DEBUG:
-            print("GPS:" + message.payload.decode())
 
     elif message.topic == topics.get("light"):
         socketio.emit('light', data=payload)

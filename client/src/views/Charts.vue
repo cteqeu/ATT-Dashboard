@@ -41,18 +41,18 @@
                 v-else-if="item.type === 'humidity' && !loading"
                 :initialData="initialHumidityData"
             />
-            <LightChart
+            <!-- <LightChart
                 v-else-if="item.type === 'light' && !loading"
                 :initialData="initialLightData"
-            />
-            <LoudnessChart
+            /> -->
+            <!-- <LoudnessChart
                 v-else-if="item.type === 'loudness' && !loading"
                 :initialData="initialLoudnessData"
             />
             <MotionChart
                 v-else-if="item.type === 'motion' && !loading"
                 :initialData="initialMotionData"
-            />
+            /> -->
             <ParticlesChart
                 v-else-if="item.type === 'particles' && !loading"
                 :initialData="initialParticlesData"
@@ -70,9 +70,9 @@ import TempChart from '../components/Charts/TempChart.vue';
 import PressureChart from '../components/Charts/PressureChart.vue';
 import AirqualityChart from '../components/Charts/AirqualityChart.vue';
 import HumidityChart from '../components/Charts/HumidityChart.vue';
-import LightChart from '../components/Charts/LightChart.vue';
-import LoudnessChart from '../components/Charts/LoudnessChart.vue';
-import MotionChart from '../components/Charts/MotionChart.vue';
+// import LightChart from '../components/Charts/LightChart.vue';
+// import LoudnessChart from '../components/Charts/LoudnessChart.vue';
+// import MotionChart from '../components/Charts/MotionChart.vue';
 import ParticlesChart from '../components/Charts/ParticlesChart.vue';
 
 export default Vue.extend({
@@ -83,9 +83,9 @@ export default Vue.extend({
         PressureChart,
         AirqualityChart,
         HumidityChart,
-        LightChart,
-        LoudnessChart,
-        MotionChart,
+        // LightChart,
+        // LoudnessChart,
+        // MotionChart,
         ParticlesChart,
     },
 
@@ -98,23 +98,23 @@ export default Vue.extend({
             // @ts-ignore
             const humidityData = await axios.get(`${this.$REST_URL}/api/humidity/10`);
             // @ts-ignore
-            const lightData = await axios.get(`${this.$REST_URL}/api/light/10`);
+            // const lightData = await axios.get(`${this.$REST_URL}/api/light/10`);
             // @ts-ignore
-            const loudnessData = await axios.get(`${this.$REST_URL}/api/loudness/1`);
+            // const loudnessData = await axios.get(`${this.$REST_URL}/api/loudness/1`);
             // @ts-ignore
-            const motionData = await axios.get(`${this.$REST_URL}/api/motion/10`);
+            // const motionData = await axios.get(`${this.$REST_URL}/api/motion/10`);
             // @ts-ignore
-            const particlesData = await axios.get(`${this.$REST_URL}/api/particles/10`);
+            const particlesData = await axios.get(`${this.$REST_URL}/api/particles/20`);
             // @ts-ignore
-            const pressureData = await axios.get(`${this.$REST_URL}/api/pressure/10`);
+            const pressureData = await axios.get(`${this.$REST_URL}/api/pressure/20`);
             // @ts-ignore
             const tempData = await axios.get(`${this.$REST_URL}/api/temperature/10`);
 
             this.initialairqualityData = airqualityData.data;
             this.initialHumidityData = humidityData.data;
-            this.initialLightData = lightData.data;
-            this.initialLoudnessData = loudnessData.data;
-            this.initialMotionData = motionData.data;
+            // this.initialLightData = lightData.data;
+            // this.initialLoudnessData = loudnessData.data;
+            // this.initialMotionData = motionData.data;
             this.initialPressureData = pressureData.data;
             this.initialParticlesData = particlesData.data;
             this.initialTempData = tempData.data;
@@ -131,9 +131,9 @@ export default Vue.extend({
             initialPressureData: [],
             initialairqualityData: [],
             initialHumidityData: [],
-            initialLightData: [],
-            initialLoudnessData: [],
-            initialMotionData: [],
+            // initialLightData: [],
+            // initialLoudnessData: [],
+            // initialMotionData: [],
             initialParticlesData: [],
 
             loading: false,
@@ -152,7 +152,7 @@ export default Vue.extend({
                     type: 'pressure',
                     x: 3,
                     y: 7,
-                    w: 6,
+                    w: 9,
                     h: 7,
                     i: '1',
                     static: false,
@@ -175,37 +175,37 @@ export default Vue.extend({
                     i: '3',
                     static: false,
                 },
-                {
-                    type: 'loudness',
-                    x: 9,
-                    y: 7,
-                    w: 3,
-                    h: 7,
-                    i: '4',
-                    static: false,
-                },
-                {
-                    type: 'light',
-                    x: 0,
-                    y: 13,
-                    w: 6,
-                    h: 7,
-                    i: '5',
-                    static: false,
-                },
-                {
-                    type: 'motion',
-                    x: 6,
-                    y: 13,
-                    w: 6,
-                    h: 7,
-                    i: '6',
-                    static: false,
-                },
+                // {
+                //     type: 'loudness',
+                //     x: 9,
+                //     y: 7,
+                //     w: 3,
+                //     h: 7,
+                //     i: '4',
+                //     static: false,
+                // },
+                // {
+                //     type: 'light',
+                //     x: 0,
+                //     y: 13,
+                //     w: 6,
+                //     h: 7,
+                //     i: '5',
+                //     static: false,
+                // },
+                // {
+                //     type: 'motion',
+                //     x: 6,
+                //     y: 13,
+                //     w: 6,
+                //     h: 7,
+                //     i: '6',
+                //     static: false,
+                // },
                 {
                     type: 'particles',
                     x: 0,
-                    y: 19,
+                    y: 12,
                     w: 12,
                     h: 9,
                     i: '7',

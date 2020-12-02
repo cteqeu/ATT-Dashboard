@@ -127,7 +127,7 @@ export default Vue.extend({
             const message: Pressure = JSON.parse(data);
             const value: number = Number(message.value.toFixed(2));
             const [timestamp, _] = new Date(message.at).toTimeString().split(' ');
-            if (this.$data.pressureData.length > 9) {
+            if (this.$data.pressureData.length > 19) {
                 this.$data.pressureData.shift();
                 this.$data.timestamps.shift();
             }

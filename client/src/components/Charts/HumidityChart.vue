@@ -43,7 +43,7 @@ export default Vue.extend({
                     },
                 },
                 dataLabels: {
-                    enabled: false,
+                    enabled: true,
                 },
                 zoom: {
                     enabled: false,
@@ -89,7 +89,7 @@ export default Vue.extend({
     mounted() {
         this.initialData.forEach((element: any) => {
             // @ts-ignore
-            this.humidityData.push(element.value);
+            this.humidityData.push(element.value.toFixed(2));
             const [t, _] = new Date(element.timestamp).toTimeString().split(' ');
             // @ts-ignore
             this.timestamps.push(t);

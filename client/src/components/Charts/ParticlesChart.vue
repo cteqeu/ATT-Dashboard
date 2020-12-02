@@ -136,7 +136,7 @@ export default Vue.extend({
     },
     sockets: {
         particles(data: Particles) {
-            if (this.$data.pm1.length > 9) {
+            if (this.$data.pm1.length > 19) {
                 this.$data.pm1.shift();
                 this.$data.pm10.shift();
                 this.$data.pm25.shift();
