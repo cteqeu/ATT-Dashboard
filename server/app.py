@@ -131,7 +131,12 @@ def export_csv():
     createCSVFile('motion')
     createCSVFile('particles')
 
-    zipf = zipfile.ZipFile('archives/export.zip', 'w', zipfile.ZIP_DEFLATED)
+    import datetime;
+    ts = datetime.datetime.now().timestamp()
+    file = 'export' + str(ts) + '.zip'
+    filename = 'archives/' + file
+
+    zipf = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
     
     for root, dirs, files in os.walk('export/'):
         for file in files:
@@ -141,7 +146,7 @@ def export_csv():
     
     time.sleep(2)
     
-    return send_from_directory('archives', 'export.zip', attachment_filename='export.zip', as_attachment=True)
+    return send_from_directory('archives', file, cache_timeout='1s', attachment_filename=file, as_attachment=True)
    
 
 @app.route('/api/humidity', methods=['GET'])
