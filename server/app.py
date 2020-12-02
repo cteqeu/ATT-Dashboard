@@ -1,4 +1,5 @@
 import os
+import time
 import json
 import eventlet
 import pandas
@@ -86,11 +87,6 @@ cur = con.cursor(cursor_factory=RealDictCursor)
 con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 create_tables(cur=cur, DEBUG=DEBUG)
 
-def zipdir(path, ziph):
-    # ziph is zipfile handle
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            ziph.write(os.path.join(root, file))
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
@@ -109,9 +105,6 @@ def catch_all(path):
     return render_template("index.html")
 
 def createCSVFile(sensor):
-    files = glob.glob('server/export')
-    for f in files:
-        os.remove(f)
     fn = "export/" + sensor + '.csv'
     cur.execute("SELECT * FROM " + sensor)
     records = cur.fetchall()
@@ -119,6 +112,14 @@ def createCSVFile(sensor):
 
 @app.route('/api/download', methods=['GET'])
 def export_csv():
+    filelist = [ f for f in os.listdir('export/') if f.endswith(".csv") ]
+    for f in filelist:
+        os.remove(os.path.join('export/', f))
+
+    ziplist = [ f for f in os.listdir('archives/') if f.endswith(".zip") ]
+    for f in ziplist:
+        os.remove(os.path.join('archives/', f))
+    
     createCSVFile('temperature')
     createCSVFile('humidity')
     createCSVFile('pressure')
@@ -131,9 +132,17 @@ def export_csv():
     createCSVFile('particles')
 
     zipf = zipfile.ZipFile('archives/export.zip', 'w', zipfile.ZIP_DEFLATED)
-    zipdir('export/', zipf)
+    
+    for root, dirs, files in os.walk('export/'):
+        for file in files:
+            zipf.write(os.path.join(root, file))
+
     zipf.close()
+    
+    time.sleep(2)
+    
     return send_from_directory('archives', 'export.zip', attachment_filename='export.zip', as_attachment=True)
+   
 
 @app.route('/api/humidity', methods=['GET'])
 def humidity():
@@ -236,7 +245,6 @@ def particlesAm(amount):
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
-    print(client)
     global COUNTER
     payload = message.payload.decode()
 

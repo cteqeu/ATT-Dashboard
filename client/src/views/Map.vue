@@ -25,9 +25,7 @@ export default Vue.extend({
         axios
             .get(URL)
             .then((response: any) => {
-                console.log(response.data);
-
-                // this.markers = response.data;
+                this.markers = response.data;
             })
             .catch((error: any) => {
                 console.error(error.message);
